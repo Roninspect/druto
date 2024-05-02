@@ -1,0 +1,135 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/features/home/repository/home_repository.dart';
+import 'package:druto/features/root/provider/location_provider.dart';
+import 'package:druto/models/hub.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:druto/core/extentions/mediquery_extention.dart';
+import 'package:druto/core/theme/theme.dart';
+import 'package:druto/models/package.dart';
+import 'package:druto/routes/router.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
+
+class BundleCard extends ConsumerWidget {
+  final Package package;
+  const BundleCard({
+    super.key,
+    required this.package,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hubs = ref.watch(getHubsProvider).valueOrNull;
+
+    final position = ref.watch(getPositionProvider).valueOrNull;
+
+    List<Hub> isLocationWithinAnyHub(
+        {required List<Hub> hubs, required LatLng location}) {
+      List<Hub> matchingHubs = [];
+      for (final hub in hubs) {
+        if (PolygonUtil.containsLocation(
+          location,
+          hub.polygonPoints
+              .map((e) => LatLng(e.lat.toDouble(), e.lng.toDouble()))
+              .toList(),
+          false,
+        )) {
+          matchingHubs.add(hub);
+        }
+      }
+      return matchingHubs;
+    }
+
+    final hub = isLocationWithinAnyHub(
+        hubs: hubs!,
+        location: LatLng(position!.latitude, position.longitude))[0];
+    return Padding(
+      padding: const EdgeInsets.all(7.0),
+      child: GestureDetector(
+        onTap: () => context.pushNamed(AppRoutes.bundle.name, extra: package),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          decoration: BoxDecoration(
+              border: Border.all(width: 0.1),
+              borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(
+                package.cover,
+                height: 95,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(height: context.height * 0.005),
+              Text(
+                package.name,
+                style: TextStyle(
+                    fontSize: context.f15, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                width: context.midOverflow * 0.8,
+                child: Text(
+                  "Pasta, Oilve oil, eggs, oregano",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                      fontSize: context.f13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54),
+                ),
+              ),
+              SizedBox(height: context.height * 0.005),
+              AsyncValueWidget(
+                value: ref.watch(
+                    getPackageItemsProvider(pckgId: package.id!, hId: hub.id!)),
+                data: (packageItems) {
+                  final sum = packageItems.fold<double>(0,
+                      (value, element) => value + element.product_line!.price);
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "\$$sum",
+                        style: TextStyle(
+                            fontSize: context.f16,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black),
+                      ),
+                      SizedBox(width: context.width * 0.01),
+                      const Text(
+                        "\$35",
+                        style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            decorationStyle: TextDecorationStyle.solid,
+                            color: Colors.grey),
+                      ),
+                      SizedBox(
+                        width: context.width * 0.15,
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: const CircleAvatar(
+                          radius: 18,
+                          backgroundColor: primaryColor,
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
