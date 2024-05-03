@@ -27,7 +27,7 @@ class _RootPageState extends ConsumerState<RootPage>
 
   @override
   Widget build(BuildContext context) {
-    // final length = ref.watch(getlocalCartItemsProvider).valueOrNull;
+    final length = ref.watch(getlocalCartItemsProvider).valueOrNull;
 
     return SafeArea(
       child: Scaffold(
@@ -54,10 +54,10 @@ class _RootPageState extends ConsumerState<RootPage>
               ),
               Tab(
                   child: badges.Badge(
-                // badgeContent: Text(
-                //   length == null ? "120" : length.length.toString(),
-                //   style: const TextStyle(color: Colors.white),
-                // ),
+                badgeContent: Text(
+                  length == null ? "120" : length.length.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
                 position: badges.BadgePosition.custom(start: 42, top: 0),
                 child: const CircleAvatar(
                   radius: 30,

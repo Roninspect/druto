@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
@@ -70,22 +69,32 @@ class BundleDetailsPage extends ConsumerWidget {
                 getPackageItemsProvider(pckgId: package.id!, hId: hub.id!)),
             data: (packageItems) {
               final sum = packageItems.fold<double>(
+                  0,
+                  (value, element) =>
+                      value +
+                      (element.product_line!.discountedPrice == 0
+                          ? element.product_line!.price
+                          : (element.product_line!.price -
+                              element.product_line!.discountedPrice)));
+              final mainsum = packageItems.fold<double>(
                   0, (value, element) => value + element.product_line!.price);
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BundleCarousel(
-                        pics: packageItems
-                            .map((e) => e.product_line!.products!.pic)
-                            .toList()),
+                    BundleCarousel(pics: [
+                      package.cover,
+                      ...packageItems
+                          .map((e) => e.product_line!.products!.pic)
+                          .toList()
+                    ]),
                     SizedBox(
                       height: context.height * 0.02,
                     ),
                     Text(
                       package.name,
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: context.height * 0.015,
@@ -95,9 +104,9 @@ class BundleDetailsPage extends ConsumerWidget {
                       children: [
                         Row(
                           children: [
-                            const Text(
-                              "\$50",
-                              style: TextStyle(
+                            Text(
+                              "৳$mainsum",
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.lineThrough,
@@ -109,8 +118,8 @@ class BundleDetailsPage extends ConsumerWidget {
                               width: context.width * 0.02,
                             ),
                             Text(
-                              "\$$sum",
-                              style: TextStyle(
+                              "৳$sum",
+                              style: const TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
                                   color: primaryColor),
@@ -198,14 +207,14 @@ class BundleDetailsPage extends ConsumerWidget {
                               packageItem.product_line!.products!.pic,
                               height: context.height * 0.042,
                             ),
-                            title: const Text(
-                              "Cabbage",
-                              style: TextStyle(
+                            title: Text(
+                              packageItem.product_line!.products!.name,
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
                             trailing: Text(
-                              "2 kg",
+                              packageItem.product_line!.products!.weight,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,

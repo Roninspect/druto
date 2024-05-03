@@ -490,5 +490,134 @@ class _GetPackageItemsProviderElement
   @override
   int get hId => (origin as GetPackageItemsProvider).hId;
 }
+
+String _$getProductLineByIdHash() =>
+    r'7599add337130986af4815e3d095277fd2394375';
+
+/// See also [getProductLineById].
+@ProviderFor(getProductLineById)
+const getProductLineByIdProvider = GetProductLineByIdFamily();
+
+/// See also [getProductLineById].
+class GetProductLineByIdFamily extends Family<AsyncValue<ProductLine>> {
+  /// See also [getProductLineById].
+  const GetProductLineByIdFamily();
+
+  /// See also [getProductLineById].
+  GetProductLineByIdProvider call({
+    required int plId,
+  }) {
+    return GetProductLineByIdProvider(
+      plId: plId,
+    );
+  }
+
+  @override
+  GetProductLineByIdProvider getProviderOverride(
+    covariant GetProductLineByIdProvider provider,
+  ) {
+    return call(
+      plId: provider.plId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getProductLineByIdProvider';
+}
+
+/// See also [getProductLineById].
+class GetProductLineByIdProvider extends FutureProvider<ProductLine> {
+  /// See also [getProductLineById].
+  GetProductLineByIdProvider({
+    required int plId,
+  }) : this._internal(
+          (ref) => getProductLineById(
+            ref as GetProductLineByIdRef,
+            plId: plId,
+          ),
+          from: getProductLineByIdProvider,
+          name: r'getProductLineByIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getProductLineByIdHash,
+          dependencies: GetProductLineByIdFamily._dependencies,
+          allTransitiveDependencies:
+              GetProductLineByIdFamily._allTransitiveDependencies,
+          plId: plId,
+        );
+
+  GetProductLineByIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.plId,
+  }) : super.internal();
+
+  final int plId;
+
+  @override
+  Override overrideWith(
+    FutureOr<ProductLine> Function(GetProductLineByIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetProductLineByIdProvider._internal(
+        (ref) => create(ref as GetProductLineByIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        plId: plId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<ProductLine> createElement() {
+    return _GetProductLineByIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetProductLineByIdProvider && other.plId == plId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, plId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetProductLineByIdRef on FutureProviderRef<ProductLine> {
+  /// The parameter `plId` of this provider.
+  int get plId;
+}
+
+class _GetProductLineByIdProviderElement
+    extends FutureProviderElement<ProductLine> with GetProductLineByIdRef {
+  _GetProductLineByIdProviderElement(super.provider);
+
+  @override
+  int get plId => (origin as GetProductLineByIdProvider).plId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

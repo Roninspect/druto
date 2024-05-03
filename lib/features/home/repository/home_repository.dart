@@ -3,6 +3,7 @@ import 'package:druto/models/category.dart';
 import 'package:druto/models/hub.dart';
 import 'package:druto/models/package_item.dart';
 import 'package:druto/models/package_line.dart';
+import 'package:druto/models/product.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -47,6 +48,12 @@ Future<List<PackageItem>> getPackageItems(GetPackageItemsRef ref,
   return ref
       .watch(homeRepositoryProvider)
       .getPackageItems(pckgId: pckgId, hid: hId);
+}
+
+@Riverpod(keepAlive: true)
+Future<ProductLine> getProductLineById(GetProductLineByIdRef ref,
+    {required int plId}) async {
+  return ref.watch(homeRepositoryProvider).getProductLineById(plId: plId);
 }
 
 class HomeRepository {
@@ -140,6 +147,22 @@ class HomeRepository {
           res.map((e) => PackageItem.fromMap(e)).toList();
 
       return packages;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ProductLine> getProductLineById({required int plId}) async {
+    try {
+      final res = await client
+          .from('product_line')
+          .select('*, products!inner(*)')
+          .eq('id', plId)
+          .single();
+
+      final ProductLine productLine = ProductLine.fromMap(res);
+
+      return productLine;
     } catch (e) {
       rethrow;
     }

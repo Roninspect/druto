@@ -47,78 +47,75 @@ class BundleCard extends ConsumerWidget {
         hubs: hubs!,
         location: LatLng(position!.latitude, position.longitude))[0];
     return Padding(
-      padding: const EdgeInsets.all(7.0),
+      padding: EdgeInsets.all(context.width * 0.02),
       child: GestureDetector(
         onTap: () => context.pushNamed(AppRoutes.bundle.name, extra: package),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: EdgeInsets.symmetric(
+              horizontal: context.width * 0.02, vertical: context.width * 0.02),
           decoration: BoxDecoration(
               border: Border.all(width: 0.1),
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(context.height * 0.01)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 package.cover,
-                height: 95,
+                height: context.height * 0.1,
                 fit: BoxFit.contain,
               ),
-              SizedBox(height: context.height * 0.005),
+              SizedBox(height: context.height * 0.01),
               Text(
                 package.name,
                 style: TextStyle(
-                    fontSize: context.f15, fontWeight: FontWeight.w600),
+                    fontSize: context.width * 0.045,
+                    fontWeight: FontWeight.w600),
               ),
-              SizedBox(
-                width: context.midOverflow * 0.8,
-                child: Text(
-                  "Pasta, Oilve oil, eggs, oregano",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                      fontSize: context.f13,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54),
-                ),
-              ),
-              SizedBox(height: context.height * 0.005),
+              SizedBox(height: context.height * 0.01),
               AsyncValueWidget(
                 value: ref.watch(
                     getPackageItemsProvider(pckgId: package.id!, hId: hub.id!)),
                 data: (packageItems) {
-                  final sum = packageItems.fold<double>(0,
+                  final sum = packageItems.fold<double>(
+                      0,
+                      (value, element) =>
+                          value +
+                          (element.product_line!.discountedPrice == 0
+                              ? element.product_line!.price
+                              : (element.product_line!.price -
+                                  element.product_line!.discountedPrice)));
+
+                  final mainsum = packageItems.fold<double>(0,
                       (value, element) => value + element.product_line!.price);
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "\$$sum",
+                        "৳$sum",
                         style: TextStyle(
                             fontSize: context.f16,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w800,
                             color: Colors.black),
                       ),
                       SizedBox(width: context.width * 0.01),
-                      const Text(
-                        "\$35",
-                        style: TextStyle(
+                      Text(
+                        "৳$mainsum",
+                        style: const TextStyle(
                             decoration: TextDecoration.lineThrough,
                             decorationStyle: TextDecorationStyle.solid,
                             color: Colors.grey),
                       ),
-                      SizedBox(
-                        width: context.width * 0.15,
-                      ),
+                      SizedBox(width: context.width * 0.15),
                       InkWell(
                         onTap: () {},
-                        child: const CircleAvatar(
-                          radius: 18,
+                        child: CircleAvatar(
+                          radius: context.height * 0.02,
                           backgroundColor: primaryColor,
                           child: Icon(
                             Icons.add,
                             color: Colors.white,
-                            size: 22,
+                            size: context.height * 0.03,
                           ),
                         ),
                       )

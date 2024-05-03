@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:druto/models/cart.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +27,9 @@ class _ProductCardState extends ConsumerState<ProductCard> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final finalSum = widget.productLine.discountedPrice == 0
+        ? widget.productLine.price
+        : (widget.productLine.price - widget.productLine.discountedPrice);
     return Padding(
       padding: const EdgeInsets.all(7.0),
       child: GestureDetector(
@@ -41,7 +45,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
             children: [
               Image.network(
                 widget.productLine.products!.pic,
-                height: 95,
+                height: context.height * 0.09,
                 fit: BoxFit.contain,
               ),
               SizedBox(height: context.height * 0.005),
@@ -67,20 +71,22 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "\$${widget.productLine.discountedPrice}",
+                    "৳ $finalSum",
                     style: TextStyle(
                         fontSize: context.f16,
                         fontWeight: FontWeight.w900,
                         color: Colors.black),
                   ),
                   SizedBox(width: context.width * 0.01),
-                  Text(
-                    "\$${widget.productLine.price}",
-                    style: const TextStyle(
-                        decoration: TextDecoration.lineThrough,
-                        decorationStyle: TextDecorationStyle.solid,
-                        color: Colors.grey),
-                  ),
+                  widget.productLine.discountedPrice == 0
+                      ? const SizedBox.shrink()
+                      : Text(
+                          "৳${widget.productLine.price}",
+                          style: const TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              decorationStyle: TextDecorationStyle.solid,
+                              color: Colors.grey),
+                        ),
                   SizedBox(
                     width: context.width * 0.15,
                   ),
@@ -91,28 +97,29 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                             setState(() {
                               isLoading = true;
                             });
-                            // await ref
-                            //     .read(cartControllerProvider.notifier)
-                            //     .addToCart(
-                            //       Cart(
-                            //         id: 2,
-                            //         pId: 1,
-                            //         plId: 1,
-                            //         quantity: 1,
-                            //       ),
-                            //     );
+
+                            await ref
+                                .read(cartControllerProvider.notifier)
+                                .addToCart(
+                                  Cart(
+                                    id: widget.productLine.id,
+                                    p_id: widget.productLine.pId,
+                                    pl_id: widget.productLine.id!,
+                                    quantity: 1,
+                                  ),
+                                );
 
                             setState(() {
                               isLoading = false;
                             });
                           },
-                          child: const CircleAvatar(
-                            radius: 18,
+                          child: CircleAvatar(
+                            radius: context.height * 0.02,
                             backgroundColor: primaryColor,
                             child: Icon(
                               Icons.add,
                               color: Colors.white,
-                              size: 22,
+                              size: context.height * 0.03,
                             ),
                           ),
                         )

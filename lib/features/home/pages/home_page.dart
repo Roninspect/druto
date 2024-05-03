@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/home/widgets/address_bar.dart';
 import 'package:druto/features/home/widgets/category_listview.dart';
@@ -82,7 +83,7 @@ class HomePage extends ConsumerWidget {
 
                         await sharefPref.setString("cart", jsonEncode([]));
 
-                        // ref.invalidate(getlocalCartItemsProvider);
+                        ref.invalidate(getlocalCartItemsProvider);
                       },
                       child: const Badge(
                         child: Icon(
