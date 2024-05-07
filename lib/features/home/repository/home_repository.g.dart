@@ -346,6 +346,151 @@ class _GetPackagesByHubIdProviderElement
   int get hId => (origin as GetPackagesByHubIdProvider).hId;
 }
 
+String _$getPackagesByIdHash() => r'9e37aaeabcf2ad014a22fdcd36dd6366121f8469';
+
+/// See also [getPackagesById].
+@ProviderFor(getPackagesById)
+const getPackagesByIdProvider = GetPackagesByIdFamily();
+
+/// See also [getPackagesById].
+class GetPackagesByIdFamily extends Family<AsyncValue<PackageLine>> {
+  /// See also [getPackagesById].
+  const GetPackagesByIdFamily();
+
+  /// See also [getPackagesById].
+  GetPackagesByIdProvider call({
+    required int pckg_id,
+    required int hubId,
+  }) {
+    return GetPackagesByIdProvider(
+      pckg_id: pckg_id,
+      hubId: hubId,
+    );
+  }
+
+  @override
+  GetPackagesByIdProvider getProviderOverride(
+    covariant GetPackagesByIdProvider provider,
+  ) {
+    return call(
+      pckg_id: provider.pckg_id,
+      hubId: provider.hubId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getPackagesByIdProvider';
+}
+
+/// See also [getPackagesById].
+class GetPackagesByIdProvider extends FutureProvider<PackageLine> {
+  /// See also [getPackagesById].
+  GetPackagesByIdProvider({
+    required int pckg_id,
+    required int hubId,
+  }) : this._internal(
+          (ref) => getPackagesById(
+            ref as GetPackagesByIdRef,
+            pckg_id: pckg_id,
+            hubId: hubId,
+          ),
+          from: getPackagesByIdProvider,
+          name: r'getPackagesByIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getPackagesByIdHash,
+          dependencies: GetPackagesByIdFamily._dependencies,
+          allTransitiveDependencies:
+              GetPackagesByIdFamily._allTransitiveDependencies,
+          pckg_id: pckg_id,
+          hubId: hubId,
+        );
+
+  GetPackagesByIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pckg_id,
+    required this.hubId,
+  }) : super.internal();
+
+  final int pckg_id;
+  final int hubId;
+
+  @override
+  Override overrideWith(
+    FutureOr<PackageLine> Function(GetPackagesByIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetPackagesByIdProvider._internal(
+        (ref) => create(ref as GetPackagesByIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pckg_id: pckg_id,
+        hubId: hubId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<PackageLine> createElement() {
+    return _GetPackagesByIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetPackagesByIdProvider &&
+        other.pckg_id == pckg_id &&
+        other.hubId == hubId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pckg_id.hashCode);
+    hash = _SystemHash.combine(hash, hubId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetPackagesByIdRef on FutureProviderRef<PackageLine> {
+  /// The parameter `pckg_id` of this provider.
+  int get pckg_id;
+
+  /// The parameter `hubId` of this provider.
+  int get hubId;
+}
+
+class _GetPackagesByIdProviderElement extends FutureProviderElement<PackageLine>
+    with GetPackagesByIdRef {
+  _GetPackagesByIdProviderElement(super.provider);
+
+  @override
+  int get pckg_id => (origin as GetPackagesByIdProvider).pckg_id;
+  @override
+  int get hubId => (origin as GetPackagesByIdProvider).hubId;
+}
+
 String _$getPackageItemsHash() => r'e9da9188293ebc3853f4a278c6cd9ca67bcd9f03';
 
 /// See also [getPackageItems].

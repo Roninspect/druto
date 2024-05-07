@@ -1,4 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
@@ -10,17 +20,30 @@ import 'package:druto/features/home/widgets/popular_package_listview.dart';
 import 'package:druto/features/home/widgets/popular_products_listview.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/hub.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:maps_toolkit/maps_toolkit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-final getpositionNameProvider = FutureProvider<List<Placemark>>((ref) async {
-  List<Placemark> placemarks =
-      await placemarkFromCoordinates(22.3708267, 91.8355767);
+class DoubleArg {
+  final num lat;
+  final num lng;
+  DoubleArg({
+    required this.lat,
+    required this.lng,
+  });
+
+  @override
+  bool operator ==(covariant DoubleArg other) {
+    if (identical(this, other)) return true;
+
+    return other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode => lat.hashCode ^ lng.hashCode;
+}
+
+final getpositionNameProvider =
+    FutureProvider.family<List<Placemark>, DoubleArg>((ref, doubleArgs) async {
+  List<Placemark> placemarks = await placemarkFromCoordinates(
+      doubleArgs.lat.toDouble(), doubleArgs.lng.toDouble());
   return placemarks;
 });
 
@@ -60,31 +83,27 @@ class HomePage extends ConsumerWidget {
             : Scaffold(
                 appBar: AppBar(
                   toolbarHeight: 90,
-                  leading: const Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: CircleAvatar(
-                      child: Icon(Icons.person),
-                    ),
-                  ),
+                  centerTitle: false,
                   title: const AddressBar(),
                   actions: [
                     InkWell(
                       onTap: () {},
                       child: const Icon(
                         Ionicons.search,
+                        size: 27,
+                      ),
+                    ),
+                    SizedBox(width: context.wMdGap),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(
+                        MaterialCommunityIcons.heart_outline,
                         size: 26,
                       ),
                     ),
                     SizedBox(width: context.wMdGap),
                     InkWell(
-                      onTap: () async {
-                        final sharefPref =
-                            await SharedPreferences.getInstance();
-
-                        await sharefPref.setString("cart", jsonEncode([]));
-
-                        ref.invalidate(getlocalCartItemsProvider);
-                      },
+                      onTap: () {},
                       child: const Badge(
                         child: Icon(
                           Ionicons.md_notifications_outline,

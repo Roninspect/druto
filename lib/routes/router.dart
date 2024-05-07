@@ -1,18 +1,14 @@
+import 'package:druto/features/checkout/pages/checkout_page.dart';
 import 'package:druto/features/package/pages/bundle_details_page.dart';
 import 'package:druto/features/product_details.dart/pages/product_details.dart';
 import 'package:druto/features/root/pages/root_page.dart';
 import 'package:druto/models/package.dart';
-import 'package:druto/models/product.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'router.g.dart';
 
-enum AppRoutes {
-  root,
-  bundle,
-  product,
-}
+enum AppRoutes { root, bundle, product, checkout }
 
 @riverpod
 GoRouter router(RouterRef ref) {
@@ -36,6 +32,13 @@ GoRouter router(RouterRef ref) {
             builder: (context, state) {
               return ProductDetailsPage(
                   productLine: state.extra as ProductLine);
+            },
+          ),
+          GoRoute(
+            path: 'checkout',
+            name: AppRoutes.checkout.name,
+            builder: (context, state) {
+              return const CheckoutPage();
             },
           ),
         ],

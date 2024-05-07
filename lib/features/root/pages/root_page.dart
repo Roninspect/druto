@@ -70,7 +70,7 @@ class _RootPageState extends ConsumerState<RootPage>
               )),
               const Tab(
                 child: Icon(
-                  MaterialCommunityIcons.heart,
+                  MaterialCommunityIcons.truck_fast,
                   size: 27,
                 ),
               ),

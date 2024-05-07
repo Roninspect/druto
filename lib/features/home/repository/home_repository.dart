@@ -43,6 +43,14 @@ Future<List<PackageLine>> getPackagesByHubId(GetPackagesByHubIdRef ref,
 }
 
 @Riverpod(keepAlive: true)
+Future<PackageLine> getPackagesById(GetPackagesByIdRef ref,
+    {required int pckg_id, required int hubId}) async {
+  return ref
+      .watch(homeRepositoryProvider)
+      .getPackagesById(pckg_id: pckg_id, hubId: hubId);
+}
+
+@Riverpod(keepAlive: true)
 Future<List<PackageItem>> getPackageItems(GetPackageItemsRef ref,
     {required int pckgId, required int hId}) async {
   return ref
@@ -127,6 +135,28 @@ class HomeRepository {
           res.map((e) => PackageLine.fromMap(e)).toList();
 
       return packages;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<PackageLine> getPackagesById({
+    required int pckg_id,
+    required int hubId,
+  }) async {
+    try {
+      final res = await client
+          .from('package_line')
+          .select('*, packages!inner(*)')
+          .eq('packages.id', pckg_id)
+          .eq('h_id', hubId)
+          .order('created_at', ascending: false)
+          .single();
+
+      print(res);
+      PackageLine packageLine = PackageLine.fromMap(res);
+
+      return packageLine;
     } catch (e) {
       rethrow;
     }
