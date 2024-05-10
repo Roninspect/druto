@@ -66,7 +66,7 @@ class LocalCartRepository {
     }
   }
 
-  FutureVoid incrementItem({required int plId}) async {
+  FutureVoid incrementItem({int? plId, int? pckgId}) async {
     try {
       final sharefPref = await SharedPreferences.getInstance();
 
@@ -77,8 +77,9 @@ class LocalCartRepository {
       final List<Cart> convertedList =
           cartList.map((e) => Cart.fromJson(e)).toList();
 
-      final itemToBeIncemented =
-          convertedList.indexWhere((item) => item.pl_id == plId);
+      final itemToBeIncemented = plId != null
+          ? convertedList.indexWhere((item) => item.pl_id == plId)
+          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
 
       Cart existingItem = convertedList[itemToBeIncemented];
 
@@ -92,7 +93,7 @@ class LocalCartRepository {
     }
   }
 
-  FutureVoid decrementItem({required int plId}) async {
+  FutureVoid decrementItem({int? plId, int? pckgId}) async {
     try {
       final sharefPref = await SharedPreferences.getInstance();
 
@@ -103,14 +104,41 @@ class LocalCartRepository {
       final List<Cart> convertedList =
           cartList.map((e) => Cart.fromJson(e)).toList();
 
-      final itemToBeIncemented =
-          convertedList.indexWhere((item) => item.pl_id == plId);
+      final itemToBeIncemented = plId != null
+          ? convertedList.indexWhere((item) => item.pl_id == plId)
+          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
 
       Cart existingItem = convertedList[itemToBeIncemented];
 
       if (existingItem.quantity > 1) {
         convertedList[itemToBeIncemented] =
             existingItem.copyWith(quantity: existingItem.quantity - 1);
+      }
+
+      return right(
+          await sharefPref.setString('cart', jsonEncode(convertedList)));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid removeItemFromCart({int? plId, int? pckgId}) async {
+    try {
+      final sharefPref = await SharedPreferences.getInstance();
+
+      final cartItemsStrings = sharefPref.getString("cart");
+
+      final List<dynamic> cartList = jsonDecode(cartItemsStrings!);
+
+      final List<Cart> convertedList =
+          cartList.map((e) => Cart.fromJson(e)).toList();
+
+      final indexToRemove = plId != null
+          ? convertedList.indexWhere((item) => item.pl_id == plId)
+          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
+
+      if (indexToRemove != -1) {
+        convertedList.removeAt(indexToRemove);
       }
 
       return right(

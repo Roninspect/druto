@@ -31,19 +31,30 @@ class CartController extends StateNotifier<bool> {
   }
 
   Future<void> incrementItem(
-      {required int plId, required BuildContext context}) async {
+      {int? plId, int? pckg_id, required BuildContext context}) async {
     state = true;
-    final res = await localCartRepository.incrementItem(plId: plId);
+    final res = await localCartRepository.incrementItem(
+        plId: plId ?? plId, pckgId: pckg_id ?? pckg_id);
     state = false;
     res.fold((l) => showSnackbar(context: context, text: l.message),
         (r) => ref.invalidate(getlocalCartItemsProvider));
   }
 
   Future<void> decrementItem(
-      {required int plId, required BuildContext context}) async {
+      {int? plId, int? pckg_id, required BuildContext context}) async {
     state = true;
-    final res = await localCartRepository.decrementItem(plId: plId);
+    final res = await localCartRepository.decrementItem(
+        plId: plId ?? plId, pckgId: pckg_id ?? pckg_id);
     state = false;
+    res.fold((l) => showSnackbar(context: context, text: l.message),
+        (r) => ref.invalidate(getlocalCartItemsProvider));
+  }
+
+  Future<void> removeItemFromCart(
+      {int? plId, int? pckgId, required BuildContext context}) async {
+    final res = await localCartRepository.removeItemFromCart(
+        pckgId: pckgId ?? pckgId, plId: plId ?? plId);
+
     res.fold((l) => showSnackbar(context: context, text: l.message),
         (r) => ref.invalidate(getlocalCartItemsProvider));
   }

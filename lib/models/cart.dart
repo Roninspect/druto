@@ -74,7 +74,6 @@ class Cart {
         other.pl_id == pl_id &&
         other.p_id == p_id &&
         other.pckg_id == pckg_id &&
-        other.quantity == quantity &&
         other.uid == uid;
   }
 
@@ -84,7 +83,6 @@ class Cart {
         pl_id.hashCode ^
         p_id.hashCode ^
         pckg_id.hashCode ^
-        quantity.hashCode ^
         uid.hashCode;
   }
 }

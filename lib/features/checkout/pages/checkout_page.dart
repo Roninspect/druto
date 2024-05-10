@@ -2,19 +2,17 @@ import 'package:druto/core/constants/order_enums.dart';
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/core/helpers/custom_snackbar.dart';
-import 'package:druto/core/theme/theme.dart';
-import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/checkout/controllers/checkout_controller.dart';
 import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/cart.dart';
+import 'package:druto/models/hub.dart';
 import 'package:druto/models/order.dart';
-import 'package:druto/models/order_product.dart';
-import 'package:druto/models/package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CheckoutPage extends ConsumerStatefulWidget {
@@ -45,25 +43,73 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
     }
   }
 
+  List<Hub> isLocationWithinAnyHub(
+      {required List<Hub> hubs, required LatLng location}) {
+    List<Hub> matchingHubs = [];
+    for (final hub in hubs) {
+      if (PolygonUtil.containsLocation(
+        location,
+        hub.polygonPoints
+            .map((e) => LatLng(e.lat.toDouble(), e.lng.toDouble()))
+            .toList(),
+        false,
+      )) {
+        matchingHubs.add(hub);
+      }
+    }
+    return matchingHubs;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(checkoutControllerProvider);
     final currentPosition = ref.watch(getPositionProvider).valueOrNull;
-    num getTotalItemPrice({
-      required List<Cart> carts,
-    }) {
+
+    final hub = isLocationWithinAnyHub(
+        hubs: ref.watch(getHubsProvider).value!,
+        location:
+            LatLng(currentPosition!.latitude, currentPosition.longitude))[0];
+    num getTotalItemPrice({required List<Cart> carts, required int hubId}) {
       num sum = 0;
       for (var element in carts) {
-        ref.watch(getProductLineByIdProvider(plId: element.pl_id!)).when(
-              data: (data) {
-                num itemPrice = data.discountedPrice != 0
-                    ? (data.price - data.discountedPrice) * element.quantity
-                    : data.price * element.quantity;
-                sum += itemPrice; // Accumulate the sum here
-              },
-              error: (error, stackTrace) {},
-              loading: () {},
-            );
+        element.pl_id == null
+            ? ref
+                .watch(getPackageItemsProvider(
+                    pckgId: element.pckg_id!, hId: hubId))
+                .when(
+                data: (packageItems) {
+                  final packsum = packageItems.fold<double>(
+                      0,
+                      (value, package) =>
+                          value +
+                          (package.product_line!.discountedPrice == 0
+                              ? package.product_line!.price * element.quantity
+                              : (package.product_line!.price -
+                                      package.product_line!.discountedPrice) *
+                                  element.quantity));
+                  sum += packsum;
+                },
+                error: (error, stackTrace) {
+                  return 0;
+                },
+                loading: () {
+                  return 0;
+                },
+              )
+            : ref.watch(getProductLineByIdProvider(plId: element.pl_id!)).when(
+                data: (data) {
+                  num itemPrice = data.discountedPrice != 0
+                      ? (data.price - data.discountedPrice) * element.quantity
+                      : data.price * element.quantity;
+                  sum += itemPrice; // Accumulate the sum here
+                },
+                error: (error, stackTrace) {
+                  return 0;
+                },
+                loading: () {
+                  return 0;
+                },
+              );
       }
 
       return sum;
@@ -76,14 +122,16 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       body: SingleChildScrollView(
           child: AsyncValueWidget(
         value: ref.watch(getpositionNameProvider(DoubleArg(
-            lat: currentPosition!.latitude, lng: currentPosition.longitude))),
+            lat: currentPosition.latitude, lng: currentPosition.longitude))),
         data: (p0) => AsyncValueWidget(
             value: Supabase.instance.client.auth.currentUser != null
                 ? ref.watch(getlocalCartItemsProvider)
                 : ref.watch(getlocalCartItemsProvider),
             data: (carts) {
-              final finalPrice = getTotalItemPrice(carts: carts) +
-                  getDeliveryCharge(getTotalItemPrice(carts: carts));
+              final finalPrice =
+                  getTotalItemPrice(carts: carts, hubId: hub.id!) +
+                      getDeliveryCharge(
+                          getTotalItemPrice(carts: carts, hubId: hub.id!));
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: isLoading
@@ -133,72 +181,166 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                               itemBuilder: (context, index) {
                                 final Cart cart = carts[index];
 
-                                return AsyncValueWidget(
-                                  value: ref.watch(getProductLineByIdProvider(
-                                      plId: cart.pl_id!)),
-                                  data: (productLine) {
-                                    final finalSum =
-                                        productLine.discountedPrice == 0
-                                            ? productLine.price
-                                            : (productLine.price -
-                                                productLine.discountedPrice);
-                                    return Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: Row(
-                                        children: [
-                                          Image.network(
-                                            productLine.products!.pic,
-                                            height: 65,
-                                            width: 65,
-                                          ),
-                                          SizedBox(
-                                            width: context.width * 0.03,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                productLine.products!.name,
-                                                style: const TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              SizedBox(
-                                                height: context.height * 0.002,
-                                              ),
-                                              Text(
-                                                productLine.products!.weight,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.grey[500]),
-                                              ),
-                                              SizedBox(
-                                                height: context.height * 0.01,
-                                              ),
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                "৳ $finalSum x ${cart.quantity}",
-                                                style: const TextStyle(
-                                                    fontSize: 22,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
+                                return cart.pl_id != null
+                                    ? AsyncValueWidget(
+                                        value: ref.watch(
+                                            getProductLineByIdProvider(
+                                                plId: cart.pl_id!)),
+                                        data: (productLine) {
+                                          final finalSum =
+                                              productLine.discountedPrice == 0
+                                                  ? productLine.price
+                                                  : (productLine.price -
+                                                      productLine
+                                                          .discountedPrice);
+                                          return Container(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Row(
+                                              children: [
+                                                Image.network(
+                                                  productLine.products!.pic,
+                                                  height: 65,
+                                                  width: 65,
+                                                ),
+                                                SizedBox(
+                                                  width: context.width * 0.03,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      productLine
+                                                          .products!.name,
+                                                      style: const TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    SizedBox(
+                                                      height: context.height *
+                                                          0.002,
+                                                    ),
+                                                    Text(
+                                                      productLine
+                                                          .products!.weight,
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color:
+                                                              Colors.grey[500]),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          context.height * 0.01,
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Spacer(),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      "৳ $finalSum x ${cart.quantity}",
+                                                      style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : AsyncValueWidget(
+                                        value: ref.watch(
+                                            getPackagesByIdProvider(
+                                                hubId: hub.id!,
+                                                pckg_id: cart.pckg_id!)),
+                                        data: (package) => AsyncValueWidget(
+                                            value: ref.watch(
+                                                getPackageItemsProvider(
+                                                    pckgId:
+                                                        package.package!.id!,
+                                                    hId: hub.id!)),
+                                            data: (packageItems) {
+                                              final sum = packageItems.fold<
+                                                      double>(
+                                                  0,
+                                                  (value, element) =>
+                                                      value +
+                                                      (element.product_line!
+                                                                  .discountedPrice ==
+                                                              0
+                                                          ? element
+                                                              .product_line!
+                                                              .price
+                                                          : (element
+                                                                  .product_line!
+                                                                  .price -
+                                                              element
+                                                                  .product_line!
+                                                                  .discountedPrice)));
+
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                child: Row(
+                                                  children: [
+                                                    Image.network(
+                                                      package.package!.cover,
+                                                      height: 65,
+                                                      width: 65,
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          context.width * 0.03,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          package.package!.name,
+                                                          style: const TextStyle(
+                                                              fontSize: 17,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        SizedBox(
+                                                          height:
+                                                              context.height *
+                                                                  0.002,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const Spacer(),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                          "৳ $sum x ${cart.quantity}",
+                                                          style: const TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                      );
                               },
                             ),
                           ),
@@ -217,7 +359,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                       fontSize: 17),
                                 ),
                                 Text(
-                                  "৳ ${getTotalItemPrice(carts: carts)}",
+                                  "৳ ${getTotalItemPrice(carts: carts, hubId: hub.id!)}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17),
@@ -237,7 +379,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                       fontSize: 17),
                                 ),
                                 Text(
-                                  "৳ ${getDeliveryCharge(getTotalItemPrice(carts: carts))}",
+                                  "৳ ${getDeliveryCharge(getTotalItemPrice(carts: carts, hubId: hub.id!))}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17),

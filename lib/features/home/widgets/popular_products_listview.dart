@@ -52,15 +52,16 @@ class PopularProductsListview extends ConsumerWidget {
                   TextStyle(fontSize: context.f16, fontWeight: FontWeight.bold),
             ),
             TextButton(
-                onPressed: () {},
-                child: Text(
-                  "See All",
-                  style: TextStyle(
-                    fontSize: context.f15,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                  ),
-                ))
+              onPressed: () {},
+              child: Text(
+                "See All",
+                style: TextStyle(
+                  fontSize: context.f15,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                ),
+              ),
+            )
           ],
         ),
         AsyncValueWidget(
@@ -73,8 +74,12 @@ class PopularProductsListview extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 final ProductLine productLine = productLines[index];
-                return ProductCard(
-                  productLine: productLine,
+
+                return Padding(
+                  padding: const EdgeInsets.all(7.0),
+                  child: ProductCard(
+                    productLine: productLine,
+                  ),
                 );
               },
             ),

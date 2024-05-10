@@ -4,6 +4,7 @@ import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/core/theme/theme.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
+import 'package:druto/features/config/config_provider.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/cart.dart';
@@ -81,6 +82,14 @@ class CartPage extends ConsumerWidget {
         }
       }
       return matchingHubs;
+    }
+
+    int getDeliveryCharge(num totalPrice) {
+      if (totalPrice > 149) {
+        return 0;
+      } else {
+        return 15;
+      }
     }
 
     final position = ref.watch(getPositionProvider).valueOrNull;
@@ -177,15 +186,28 @@ class CartPage extends ConsumerWidget {
                                                         MainAxisSize.min,
                                                     children: [
                                                       GestureDetector(
-                                                        onTap: () => ref
-                                                            .read(
-                                                                cartControllerProvider
+                                                        onTap: () {
+                                                          if (cart.quantity >
+                                                              1) {
+                                                            ref
+                                                                .read(cartControllerProvider
                                                                     .notifier)
-                                                            .decrementItem(
-                                                                plId:
-                                                                    cart.pl_id!,
-                                                                context:
-                                                                    context),
+                                                                .decrementItem(
+                                                                    plId: cart
+                                                                        .pl_id!,
+                                                                    context:
+                                                                        context);
+                                                          } else {
+                                                            ref
+                                                                .read(cartControllerProvider
+                                                                    .notifier)
+                                                                .removeItemFromCart(
+                                                                    context:
+                                                                        context,
+                                                                    plId: cart
+                                                                        .pl_id);
+                                                          }
+                                                        },
                                                         child: Container(
                                                           padding:
                                                               const EdgeInsets
@@ -257,7 +279,17 @@ class CartPage extends ConsumerWidget {
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   IconButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        ref
+                                                            .read(
+                                                                cartControllerProvider
+                                                                    .notifier)
+                                                            .removeItemFromCart(
+                                                                context:
+                                                                    context,
+                                                                plId:
+                                                                    cart.pl_id);
+                                                      },
                                                       icon: const Icon(
                                                         Icons.delete_outline,
                                                         size: 27,
@@ -340,14 +372,29 @@ class CartPage extends ConsumerWidget {
                                                             MainAxisSize.min,
                                                         children: [
                                                           GestureDetector(
-                                                            onTap: () => ref
-                                                                .read(cartControllerProvider
-                                                                    .notifier)
-                                                                .decrementItem(
-                                                                    plId: cart
-                                                                        .pl_id!,
-                                                                    context:
-                                                                        context),
+                                                            onTap: () {
+                                                              if (cart.quantity >
+                                                                  1) {
+                                                                ref
+                                                                    .read(cartControllerProvider
+                                                                        .notifier)
+                                                                    .decrementItem(
+                                                                        pckg_id:
+                                                                            package
+                                                                                .pckg_id,
+                                                                        context:
+                                                                            context);
+                                                              } else {
+                                                                ref
+                                                                    .read(cartControllerProvider
+                                                                        .notifier)
+                                                                    .removeItemFromCart(
+                                                                        context:
+                                                                            context,
+                                                                        pckgId:
+                                                                            cart.pckg_id);
+                                                              }
+                                                            },
                                                             child: Container(
                                                               padding:
                                                                   const EdgeInsets
@@ -389,8 +436,8 @@ class CartPage extends ConsumerWidget {
                                                                 .read(cartControllerProvider
                                                                     .notifier)
                                                                 .incrementItem(
-                                                                    plId: cart
-                                                                        .pl_id!,
+                                                                    pckg_id: package
+                                                                        .pckg_id,
                                                                     context:
                                                                         context),
                                                             child: Container(
@@ -423,7 +470,16 @@ class CartPage extends ConsumerWidget {
                                                         CrossAxisAlignment.end,
                                                     children: [
                                                       IconButton(
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            ref
+                                                                .read(cartControllerProvider
+                                                                    .notifier)
+                                                                .removeItemFromCart(
+                                                                    context:
+                                                                        context,
+                                                                    pckgId: cart
+                                                                        .pckg_id);
+                                                          },
                                                           icon: const Icon(
                                                             Icons
                                                                 .delete_outline,
@@ -448,131 +504,160 @@ class CartPage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(height: context.height * 0.01),
-                        Container(
-                          color: Colors.grey[100],
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Add Coupon",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: context.height * 0.01),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
+                        AsyncValueWidget(
+                          value: ref.watch(getConfigsProvider),
+                          data: (configs) {
+                            final freeDeliveryCondition = getTotalItemPrice(
+                                        carts: carts, hubId: hub.id!) >
+                                    configs.min_delivery
+                                ? 0
+                                : configs.min_delivery -
+                                    getTotalItemPrice(
+                                        carts: carts, hubId: hub.id!);
+                            return Container(
+                              color: Colors.grey[100],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(
-                                      width: 250,
-                                      height: 50,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: "Add Voucher Code",
-                                          border: OutlineInputBorder(),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(width: 0.2),
-                                          ),
+                                  const Text(
+                                    "Add Coupon",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: context.height * 0.01),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                          width: 250,
+                                          height: 50,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              hintText: "Add Voucher Code",
+                                              border: OutlineInputBorder(),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide:
+                                                    BorderSide(width: 0.2),
+                                              ),
+                                            ),
+                                          )),
+                                      SizedBox(width: context.width * 0.03),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Supabase
+                                                        .instance
+                                                        .client
+                                                        .auth
+                                                        .currentUser !=
+                                                    null
+                                                ? Colors.green
+                                                : Colors.grey,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            fixedSize: Size(context.width * 0.3,
+                                                context.height * 0.055)),
+                                        onPressed: () {
+                                          if (Supabase.instance.client.auth
+                                                  .currentUser ==
+                                              null) {
+                                            showSnackbar(
+                                                context: context,
+                                                text:
+                                                    "Please Sign In To Use Coupon");
+                                          }
+                                        },
+                                        child: const Text(
+                                          "Apply",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white),
                                         ),
-                                      )),
-                                  SizedBox(width: context.width * 0.03),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Supabase.instance
-                                                    .client.auth.currentUser !=
-                                                null
-                                            ? Colors.green
-                                            : Colors.grey,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        fixedSize: Size(context.width * 0.3,
-                                            context.height * 0.055)),
-                                    onPressed: () {
-                                      if (Supabase.instance.client.auth
-                                              .currentUser ==
-                                          null) {
-                                        showSnackbar(
-                                            context: context,
-                                            text:
-                                                "Please Sign In To Use Coupon");
-                                      }
-                                    },
-                                    child: const Text(
-                                      "Apply",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: context.height * 0.01),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Total Price",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17),
+                                        ),
+                                        Text(
+                                          "৳ ${getTotalItemPrice(carts: carts, hubId: hub.id!)}",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Shipping Charge",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17),
+                                        ),
+                                        Text(
+                                          getDeliveryCharge(getTotalItemPrice(
+                                                      carts: carts,
+                                                      hubId: hub.id!)) ==
+                                                  0
+                                              ? "৳15"
+                                              : "৳${carts.isEmpty ? 0 : getDeliveryCharge(getTotalItemPrice(carts: carts, hubId: hub.id!))}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  freeDeliveryCondition == 0
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : TextDecoration.none,
+                                              decorationThickness: 3,
+                                              fontSize: 17),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: context.height * 0.01),
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    height: context.height * 0.05,
+                                    decoration: BoxDecoration(
+                                        color: freeDeliveryCondition == 0
+                                            ? Colors.green[200]
+                                            : Colors.blue[200],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Center(
+                                      child: Text(
+                                        freeDeliveryCondition == 0
+                                            ? "Your Delivery Charge is Free"
+                                            : "Shop for ৳$freeDeliveryCondition more to get free delivery",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
                                     ),
                                   )
                                 ],
                               ),
-                              SizedBox(height: context.height * 0.01),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Total Price",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 17),
-                                    ),
-                                    Text(
-                                      "৳ ${getTotalItemPrice(carts: carts, hubId: hub.id!)}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Shipping Charge",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 17),
-                                    ),
-                                    Text(
-                                      "৳ ${getTotalItemPrice(carts: carts, hubId: hub.id!)}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Discount",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 17),
-                                    ),
-                                    Text(
-                                      "৳ ${getTotalItemPrice(carts: carts, hubId: hub.id!)}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),

@@ -64,6 +64,8 @@ Future<ProductLine> getProductLineById(GetProductLineByIdRef ref,
   return ref.watch(homeRepositoryProvider).getProductLineById(plId: plId);
 }
 
+//** main Repository class */
+
 class HomeRepository {
   final SupabaseClient client;
   HomeRepository({
