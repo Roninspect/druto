@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:druto/core/helpers/failure.dart';
 import 'package:druto/core/helpers/typedefs.dart';
+import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/models/cart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -13,6 +14,18 @@ final localCartProvider = Provider<LocalCartRepository>((ref) {
 
 final getlocalCartItemsProvider = FutureProvider<List<Cart>>((ref) async {
   return ref.watch(localCartProvider).getLocalCartItems();
+});
+
+final isInCartProvider = FutureProvider.family<Cart?, int>((ref, plId) async {
+  return ref.watch(localCartProvider).isInCart(
+        plId: plId,
+      );
+});
+final isPackageInCartProvider =
+    FutureProvider.family<Cart?, int>((ref, pckgId) async {
+  return ref.watch(localCartProvider).isPackageInCart(
+        pckgId: pckgId,
+      );
 });
 
 class LocalCartRepository {
@@ -32,15 +45,12 @@ class LocalCartRepository {
 
       if (existingItemIndex != -1) {
         Cart existingItem = convertedList[existingItemIndex];
-        print("Existing item found: ${convertedList[existingItemIndex]}");
 
         convertedList[existingItemIndex] =
             existingItem.copyWith(quantity: existingItem.quantity + 1);
       } else {
         convertedList.add(localIds);
       }
-
-      print(convertedList);
 
       await sharefPref.setString('cart', jsonEncode(convertedList));
     } catch (e, stk) {
@@ -145,6 +155,59 @@ class LocalCartRepository {
           await sharefPref.setString('cart', jsonEncode(convertedList)));
     } catch (e) {
       return left(Failure(e.toString()));
+    }
+  }
+
+  Future<Cart?> isInCart({int? plId}) async {
+    try {
+      final sharefPref = await SharedPreferences.getInstance();
+
+      final cartItemsStrings = sharefPref.getString("cart");
+
+      final List<dynamic> cartList = jsonDecode(cartItemsStrings!);
+
+      final List<Cart> convertedList =
+          cartList.map((e) => Cart.fromJson(e)).toList();
+
+      final itemIndex = convertedList.indexWhere((item) => item.pl_id == plId);
+
+      if (itemIndex == -1) {
+        return null;
+      }
+
+      final Cart existingItem = convertedList[itemIndex];
+
+      return existingItem;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Cart?> isPackageInCart({int? pckgId}) async {
+    try {
+      final sharefPref = await SharedPreferences.getInstance();
+
+      final cartItemsStrings = sharefPref.getString("cart");
+
+      final List<dynamic> cartList = jsonDecode(cartItemsStrings!);
+
+      final List<Cart> convertedList =
+          cartList.map((e) => Cart.fromJson(e)).toList();
+
+      final itemIndex = convertedList.indexWhere((item) {
+        return item.pckg_id == pckgId;
+      });
+
+      if (itemIndex == -1) {
+        return null;
+      }
+
+      final Cart existingItem = convertedList[itemIndex];
+
+      return existingItem;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

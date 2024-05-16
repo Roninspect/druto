@@ -52,6 +52,8 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   maps_toolkit: ^3.0.0
   geocoding: ^3.0.0
+  delightful_toast: ^1.1.0
+  easy_stepper: ^0.8.4
 
 dev_dependencies:
   build_runner: ^2.4.9

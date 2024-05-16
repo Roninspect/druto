@@ -17,12 +17,12 @@ ProductsRepository productsRepository(ProductsRepositoryRef ref) {
   return ProductsRepository(client: Supabase.instance.client);
 }
 
-@Riverpod(keepAlive: true)
-Future<List<ProductLine>> getProductsByCategory(
-  GetProductsByCategoryRef ref,
-) async {
-  return ref.watch(productsRepositoryProvider).getProductByCategory(ref: ref);
-}
+// @Riverpod(keepAlive: true)
+// Future<List<ProductLine>> getProductsByCategory(
+//   GetProductsByCategoryRef ref,
+// ) async {
+//   return ref.watch(productsRepositoryProvider).getProductByCategory(ref: ref);
+// }
 
 class ProductsRepository {
   final SupabaseClient client;
@@ -45,6 +45,8 @@ class ProductsRepository {
           location: LatLng(position!.latitude, position.longitude))[0];
 
       final categoryId = ref.watch(selectedCategoryProvider);
+
+      print(categoryId);
 
       List<Map<String, dynamic>> res;
 

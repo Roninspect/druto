@@ -13,4 +13,8 @@ class SelectedPageNoNotifier extends _$SelectedPageNoNotifier {
     final pageNo = state! + 1;
     state = pageNo;
   }
+
+  void reset() {
+    state = 0;
+  }
 }

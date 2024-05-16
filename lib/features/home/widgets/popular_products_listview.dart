@@ -1,5 +1,7 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
+import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/home/widgets/product_card.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
@@ -67,23 +69,30 @@ class PopularProductsListview extends ConsumerWidget {
         AsyncValueWidget(
           value:
               ref.watch(getProductsByHubProvider(cid: hub.cId, hid: hub.id!)),
-          data: (productLines) => SizedBox(
-            height: context.height * 0.25,
-            child: ListView.builder(
-              itemCount: productLines.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final ProductLine productLine = productLines[index];
+          data: (productLines) {
+            return SizedBox(
+              height: context.height * 0.25,
+              child: ListView.builder(
+                itemCount: productLines.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final ProductLine productLine = productLines[index];
 
-                return Padding(
-                  padding: const EdgeInsets.all(7.0),
-                  child: ProductCard(
-                    productLine: productLine,
-                  ),
-                );
-              },
-            ),
-          ),
+                  return AsyncValueWidget(
+                    value: ref.watch(isInCartProvider(productLine.id!)),
+                    data: (p0) => Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: ProductCard(
+                        productLine: productLine,
+                        isInCart: p0 == null ? false : true,
+                        cart: p0 ?? p0,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         ),
       ],
     );

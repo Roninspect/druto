@@ -4,7 +4,6 @@ import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:badges/badges.dart' as badges;
 
 class RootPage extends ConsumerStatefulWidget {
@@ -27,7 +26,12 @@ class _RootPageState extends ConsumerState<RootPage>
 
   @override
   Widget build(BuildContext context) {
-    final length = ref.watch(getlocalCartItemsProvider).valueOrNull;
+    final carts = ref.watch(getlocalCartItemsProvider).valueOrNull;
+
+    int totalItems() {
+      return carts!.fold(
+          0, (previousValue, element) => previousValue + element.quantity);
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -55,7 +59,7 @@ class _RootPageState extends ConsumerState<RootPage>
               Tab(
                   child: badges.Badge(
                 badgeContent: Text(
-                  length == null ? "120" : length.length.toString(),
+                  carts == null ? "0" : totalItems().toString(),
                   style: const TextStyle(color: Colors.white),
                 ),
                 position: badges.BadgePosition.custom(start: 42, top: 0),
@@ -85,16 +89,3 @@ class _RootPageState extends ConsumerState<RootPage>
     );
   }
 }
-
-// BottomNavigationBar(
-//           currentIndex: navIndex,
-//           unselectedItemColor: Colors.black,
-//           selectedItemColor: Colors.green,
-//           onTap: (value) =>
-//               ref.read(navIndexProvider.notifier).changeIndex(index: value),
-//           items: const [
-//             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-//             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-//             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-//             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-//           ]),

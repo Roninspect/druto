@@ -12,7 +12,7 @@
 //   }
 
 //   void updateRange() {
-//     final selectedPage = ref.watch(selectedPageNoProvider);
+//     final selectedPage = ref.watch(selectedPageNoNotifierProvider);
 //     state = DoubleArgsPaginate(
 //         start: selectedPage * 10, end: (selectedPage * 10) + 10 - 1);
 //   }

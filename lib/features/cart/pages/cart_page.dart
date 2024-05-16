@@ -144,10 +144,15 @@ class CartPage extends ConsumerWidget {
                                           padding: const EdgeInsets.all(5),
                                           child: Row(
                                             children: [
-                                              Image.network(
-                                                productLine.products!.pic,
-                                                height: 65,
-                                                width: 65,
+                                              GestureDetector(
+                                                onTap: () => context.pushNamed(
+                                                    AppRoutes.product.name,
+                                                    extra: productLine),
+                                                child: Image.network(
+                                                  productLine.products!.pic,
+                                                  height: 65,
+                                                  width: 65,
+                                                ),
                                               ),
                                               SizedBox(
                                                 width: context.width * 0.03,
@@ -156,12 +161,20 @@ class CartPage extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    productLine.products!.name,
-                                                    style: const TextStyle(
-                                                        fontSize: 17,
-                                                        fontWeight:
-                                                            FontWeight.w600),
+                                                  GestureDetector(
+                                                    onTap: () =>
+                                                        context.pushNamed(
+                                                            AppRoutes
+                                                                .product.name,
+                                                            extra: productLine),
+                                                    child: Text(
+                                                      productLine
+                                                          .products!.name,
+                                                      style: const TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     height:
@@ -334,168 +347,174 @@ class CartPage extends ConsumerWidget {
                                                                 .product_line!
                                                                 .discountedPrice)));
 
-                                            return Container(
-                                              padding: const EdgeInsets.all(5),
-                                              child: Row(
-                                                children: [
-                                                  Image.network(
-                                                    package.package!.cover,
-                                                    height: 65,
-                                                    width: 65,
-                                                  ),
-                                                  SizedBox(
-                                                    width: context.width * 0.03,
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        package.package!.name,
-                                                        style: const TextStyle(
-                                                            fontSize: 17,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                      SizedBox(
-                                                        height: context.height *
-                                                            0.002,
-                                                      ),
-                                                      SizedBox(
-                                                        height: context.height *
-                                                            0.01,
-                                                      ),
-                                                      Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              if (cart.quantity >
-                                                                  1) {
-                                                                ref
-                                                                    .read(cartControllerProvider
-                                                                        .notifier)
-                                                                    .decrementItem(
-                                                                        pckg_id:
-                                                                            package
-                                                                                .pckg_id,
-                                                                        context:
-                                                                            context);
-                                                              } else {
-                                                                ref
-                                                                    .read(cartControllerProvider
-                                                                        .notifier)
-                                                                    .removeItemFromCart(
-                                                                        context:
-                                                                            context,
-                                                                        pckgId:
-                                                                            cart.pckg_id);
-                                                              }
-                                                            },
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2),
-                                                              decoration: BoxDecoration(
-                                                                  border: Border
-                                                                      .all(
-                                                                          width:
-                                                                              0.5),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
-                                                              child: const Icon(
-                                                                  Icons.remove),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                              width: context
-                                                                      .width *
-                                                                  0.03),
-                                                          Text(
-                                                            "${cart.quantity}",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 20,
+                                            return GestureDetector(
+                                              onTap: () => context.pushNamed(
+                                                  AppRoutes.bundle.name,
+                                                  extra: package),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                child: Row(
+                                                  children: [
+                                                    Image.network(
+                                                      package.package!.cover,
+                                                      height: 65,
+                                                      width: 65,
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          context.width * 0.03,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          package.package!.name,
+                                                          style: const TextStyle(
+                                                              fontSize: 17,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width:
-                                                                context.width *
-                                                                    0.03,
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () => ref
-                                                                .read(cartControllerProvider
-                                                                    .notifier)
-                                                                .incrementItem(
-                                                                    pckg_id: package
-                                                                        .pckg_id,
-                                                                    context:
-                                                                        context),
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2),
-                                                              decoration: BoxDecoration(
-                                                                  border: Border
-                                                                      .all(
-                                                                          width:
-                                                                              0.5),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
-                                                              child: const Icon(
-                                                                Icons.add,
-                                                                color:
-                                                                    primaryColor,
+                                                                      .w600),
+                                                        ),
+                                                        SizedBox(
+                                                          height:
+                                                              context.height *
+                                                                  0.002,
+                                                        ),
+                                                        SizedBox(
+                                                          height:
+                                                              context.height *
+                                                                  0.01,
+                                                        ),
+                                                        Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                if (cart.quantity >
+                                                                    1) {
+                                                                  ref.read(cartControllerProvider.notifier).decrementItem(
+                                                                      pckg_id:
+                                                                          package
+                                                                              .pckg_id,
+                                                                      context:
+                                                                          context);
+                                                                } else {
+                                                                  ref
+                                                                      .read(cartControllerProvider
+                                                                          .notifier)
+                                                                      .removeItemFromCart(
+                                                                          context:
+                                                                              context,
+                                                                          pckgId:
+                                                                              cart.pckg_id);
+                                                                }
+                                                              },
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(2),
+                                                                decoration: BoxDecoration(
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            0.5),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10)),
+                                                                child: const Icon(
+                                                                    Icons
+                                                                        .remove),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const Spacer(),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            ref
-                                                                .read(cartControllerProvider
-                                                                    .notifier)
-                                                                .removeItemFromCart(
-                                                                    context:
-                                                                        context,
-                                                                    pckgId: cart
-                                                                        .pckg_id);
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons
-                                                                .delete_outline,
-                                                            size: 27,
-                                                          )),
-                                                      Text(
-                                                        "৳ $sum x ${cart.quantity}",
-                                                        style: const TextStyle(
-                                                            fontSize: 22,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
+                                                            SizedBox(
+                                                                width: context
+                                                                        .width *
+                                                                    0.03),
+                                                            Text(
+                                                              "${cart.quantity}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: context
+                                                                      .width *
+                                                                  0.03,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () => ref
+                                                                  .read(cartControllerProvider
+                                                                      .notifier)
+                                                                  .incrementItem(
+                                                                      pckg_id:
+                                                                          package
+                                                                              .pckg_id,
+                                                                      context:
+                                                                          context),
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(2),
+                                                                decoration: BoxDecoration(
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            0.5),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10)),
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.add,
+                                                                  color:
+                                                                      primaryColor,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const Spacer(),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              ref
+                                                                  .read(cartControllerProvider
+                                                                      .notifier)
+                                                                  .removeItemFromCart(
+                                                                      context:
+                                                                          context,
+                                                                      pckgId: cart
+                                                                          .pckg_id);
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .delete_outline,
+                                                              size: 27,
+                                                            )),
+                                                        Text(
+                                                          "৳ $sum x ${cart.quantity}",
+                                                          style: const TextStyle(
+                                                              fontSize: 22,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           }),
@@ -564,8 +583,13 @@ class CartPage extends ConsumerWidget {
                                               null) {
                                             showSnackbar(
                                                 context: context,
+                                                leadingIcon:
+                                                    Icons.warning_amber,
+                                                backgroundColor: Colors.red,
                                                 text:
-                                                    "Please Sign In To Use Coupon");
+                                                    "Please Sign In to Use Coupons",
+                                                subtitle:
+                                                    "Click here to Sign In");
                                           }
                                         },
                                         child: const Text(

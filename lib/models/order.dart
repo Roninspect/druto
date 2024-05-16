@@ -54,8 +54,8 @@ class UserOrder {
   factory UserOrder.fromMap(Map<String, dynamic> map) {
     return UserOrder(
       id: map['id'] != null ? map['id'] as int : null,
-      delivery_status: DeliveryStatus.values[map['delivery_status']],
-      order_user_type: OrderUserType.values[map['user_type']],
+      delivery_status: DeliveryStatus.values.byName(map['delivery_status']),
+      order_user_type: OrderUserType.values.byName(map['user_type']),
       total_amount: map['total_amount'] as num,
       phone: map['phone'] as String,
       uid: map['uid'] != null ? map['uid'] as String : null,

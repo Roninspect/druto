@@ -1,3 +1,6 @@
+import 'package:druto/core/extentions/mediquery_extention.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
+import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/features/products/providers/is_last_page.dart';
 import 'package:druto/features/products/providers/page_provider.dart';
 import 'package:druto/features/products/providers/product_list.dart';
@@ -8,6 +11,7 @@ import 'package:druto/features/home/widgets/product_card.dart';
 import 'package:druto/features/products/repository/products_repository.dart';
 import 'package:druto/models/hub.dart';
 import 'package:druto/models/product_line.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductsListByCategory extends ConsumerStatefulWidget {
   final String name;
@@ -59,6 +63,14 @@ class _ProductsListByCategoryState
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+              onPressed: () {
+                ref.invalidate(selectedPageNoNotifierProvider);
+                ref.invalidate(isLastPageProvider);
+                context.pop();
+              },
+              icon: const Icon(Icons.arrow_back)),
           title: Text(widget.name),
           toolbarHeight: 60,
           bottom:
@@ -72,36 +84,61 @@ class _ProductsListByCategoryState
                   ? const Center(child: CircularProgressIndicator())
                   : error != null
                       ? Text(error.toString())
-                      : Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: GridView.builder(
-                                  itemCount: data!.length,
-                                  controller: scrollController,
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 5,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    final ProductLine productLine = data[index];
+                      : data!.isEmpty
+                          ? const Column(
+                              children: [
+                                Center(
+                                  child: Text("No product"),
+                                )
+                              ],
+                            )
+                          : Expanded(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: GridView.builder(
+                                      itemCount: data.length,
+                                      controller: scrollController,
+                                      shrinkWrap: true,
+                                      physics: postLoading.isLoading
+                                          ? const NeverScrollableScrollPhysics()
+                                          : const AlwaysScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5,
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        final ProductLine productLine =
+                                            data[index];
 
-                                    return Column(
-                                      children: [
-                                        ProductCard(productLine: productLine),
-                                      ],
-                                    );
-                                  },
-                                ),
+                                        print(data[0]);
+
+                                        return AsyncValueWidget(
+                                          value: ref.watch(isInCartProvider(
+                                              productLine.id!)),
+                                          data: (p0) => Padding(
+                                            padding: const EdgeInsets.all(7.0),
+                                            child: ProductCard(
+                                              productLine: productLine,
+                                              isInCart:
+                                                  p0 == null ? false : true,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: postLoading.isLoading ? 20 : 0,
+                                  ),
+                                  if (postLoading.isLoading)
+                                    const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                ],
                               ),
-                              if (postLoading.isLoading)
-                                const Center(child: CircularProgressIndicator())
-                            ],
-                          ),
-                        )
+                            )
             ],
           ),
         ),

@@ -440,9 +440,11 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                             items: carts);
                                   } else {
                                     showSnackbar(
+                                        leadingIcon: Icons.warning_amber,
                                         context: context,
                                         text:
-                                            "Please provide your phone and house name");
+                                            "Please provide your phone and house name",
+                                        backgroundColor: Colors.red);
                                   }
                                 },
                               ),

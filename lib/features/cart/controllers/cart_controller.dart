@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:druto/core/helpers/custom_snackbar.dart';
+import 'package:druto/core/theme/theme.dart';
 import 'package:druto/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +27,10 @@ class CartController extends StateNotifier<bool> {
         await localCartRepository.addToLocalCart(localIds: localIds);
       } else {}
       ref.invalidate(getlocalCartItemsProvider);
+      localIds.pl_id == null
+          ? ref.invalidate(isPackageInCartProvider(localIds.pckg_id!))
+          : ref.invalidate(isInCartProvider(localIds.pl_id!));
+
       state = false;
     } catch (e) {}
   }
@@ -36,8 +41,17 @@ class CartController extends StateNotifier<bool> {
     final res = await localCartRepository.incrementItem(
         plId: plId ?? plId, pckgId: pckg_id ?? pckg_id);
     state = false;
-    res.fold((l) => showSnackbar(context: context, text: l.message),
-        (r) => ref.invalidate(getlocalCartItemsProvider));
+    res.fold(
+        (l) => showSnackbar(
+            leadingIcon: Icons.warning_amber,
+            context: context,
+            text: l.message,
+            backgroundColor: Colors.red), (r) {
+      ref.invalidate(getlocalCartItemsProvider);
+      plId == null
+          ? ref.invalidate(isPackageInCartProvider(pckg_id!))
+          : ref.invalidate(isInCartProvider(plId));
+    });
   }
 
   Future<void> decrementItem(
@@ -46,8 +60,17 @@ class CartController extends StateNotifier<bool> {
     final res = await localCartRepository.decrementItem(
         plId: plId ?? plId, pckgId: pckg_id ?? pckg_id);
     state = false;
-    res.fold((l) => showSnackbar(context: context, text: l.message),
-        (r) => ref.invalidate(getlocalCartItemsProvider));
+    res.fold(
+        (l) => showSnackbar(
+            leadingIcon: Icons.warning_amber,
+            context: context,
+            text: l.message,
+            backgroundColor: Colors.red), (r) {
+      ref.invalidate(getlocalCartItemsProvider);
+      plId == null
+          ? ref.invalidate(isPackageInCartProvider(pckg_id!))
+          : ref.invalidate(isInCartProvider(plId));
+    });
   }
 
   Future<void> removeItemFromCart(
@@ -55,7 +78,24 @@ class CartController extends StateNotifier<bool> {
     final res = await localCartRepository.removeItemFromCart(
         pckgId: pckgId ?? pckgId, plId: plId ?? plId);
 
-    res.fold((l) => showSnackbar(context: context, text: l.message),
-        (r) => ref.invalidate(getlocalCartItemsProvider));
+    res.fold(
+        (l) => showSnackbar(
+            leadingIcon: Icons.warning_amber,
+            context: context,
+            text: l.message,
+            backgroundColor: Colors.red), (r) {
+      ref.invalidate(getlocalCartItemsProvider);
+      plId == null
+          ? ref.invalidate(isPackageInCartProvider(pckgId!))
+          : ref.invalidate(isInCartProvider(plId));
+      showSnackbar(
+          context: context,
+          leadingIcon: Icons.shopping_bag,
+          inTop: true,
+          text: pckgId == null
+              ? "Product Removed from Cart"
+              : "Package Removed from Cart",
+          backgroundColor: Colors.amber);
+    });
   }
 }

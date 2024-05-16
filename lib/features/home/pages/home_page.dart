@@ -21,25 +21,6 @@ import 'package:druto/features/home/widgets/popular_products_listview.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/hub.dart';
 
-class DoubleArg {
-  final num lat;
-  final num lng;
-  DoubleArg({
-    required this.lat,
-    required this.lng,
-  });
-
-  @override
-  bool operator ==(covariant DoubleArg other) {
-    if (identical(this, other)) return true;
-
-    return other.lat == lat && other.lng == lng;
-  }
-
-  @override
-  int get hashCode => lat.hashCode ^ lng.hashCode;
-}
-
 final getpositionNameProvider =
     FutureProvider.family<List<Placemark>, DoubleArg>((ref, doubleArgs) async {
   List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -157,4 +138,42 @@ class HomePage2 extends ConsumerWidget {
       ),
     );
   }
+}
+
+class DoubleArg {
+  final num lat;
+  final num lng;
+  DoubleArg({
+    required this.lat,
+    required this.lng,
+  });
+
+  @override
+  bool operator ==(covariant DoubleArg other) {
+    if (identical(this, other)) return true;
+
+    return other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode => lat.hashCode ^ lng.hashCode;
+}
+
+class DoubleArgs {
+  int? plId;
+  int? pckgId;
+  DoubleArgs({
+    this.plId,
+    this.pckgId,
+  });
+
+  @override
+  bool operator ==(covariant DoubleArgs other) {
+    if (identical(this, other)) return true;
+
+    return other.plId == plId && other.pckgId == pckgId;
+  }
+
+  @override
+  int get hashCode => plId.hashCode ^ pckgId.hashCode;
 }

@@ -7,7 +7,7 @@ part of 'page_provider.dart';
 // **************************************************************************
 
 String _$selectedPageNoNotifierHash() =>
-    r'93e67ae5c15b3667214b075b2e2f967532bb7a49';
+    r'f82a52842ee231ad677acc4b29ffc2f65663ed63';
 
 /// See also [SelectedPageNoNotifier].
 @ProviderFor(SelectedPageNoNotifier)

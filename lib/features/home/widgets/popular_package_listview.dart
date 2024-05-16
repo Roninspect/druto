@@ -1,7 +1,9 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
+import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
-import 'package:druto/features/home/widgets/bundle_card.dart';
+import 'package:druto/features/home/widgets/package_card.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/hub.dart';
 import 'package:druto/models/package_line.dart';
@@ -67,14 +69,23 @@ class PopularPackageListview extends ConsumerWidget {
         AsyncValueWidget(
           value: ref.watch(getPackagesByHubIdProvider(hId: hub.id!)),
           data: (packages) => SizedBox(
-            height: context.height * 0.25,
+            height: context.height * 0.29,
             child: ListView.builder(
               itemCount: packages.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                final PackageLine package = packages[index];
-                return BundleCard(
-                  package: package.package!,
+                final PackageLine packageLine = packages[index];
+
+                return AsyncValueWidget(
+                  value: ref
+                      .watch(isPackageInCartProvider(packageLine.package!.id!)),
+                  data: (p0) {
+                    return PackageCard(
+                      packageLine: packageLine,
+                      isInCart: p0 == null ? false : true,
+                      cart: p0 ?? p0,
+                    );
+                  },
                 );
               },
             ),

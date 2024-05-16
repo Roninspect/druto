@@ -4,11 +4,14 @@ import 'package:druto/features/products/repository/products_repository.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final productByCategoryProvider =
-    AsyncNotifierProvider<ProductByCategoryNotifier, List<ProductLine>>(
-        ProductByCategoryNotifier.new);
+part 'product_list.g.dart';
 
-class ProductByCategoryNotifier extends AsyncNotifier<List<ProductLine>> {
+// final productByCategoryProvider =
+//     AsyncNotifierProvider<ProductByCategoryNotifier, List<ProductLine>>(
+//         ProductByCategoryNotifier.new);
+
+@Riverpod(keepAlive: false)
+class ProductByCategory extends _$ProductByCategory {
   Future<List<ProductLine>> initFetch() async {
     final repository = ref.watch(productsRepositoryProvider);
     return await repository.getProductByCategory(ref: ref);
@@ -17,11 +20,18 @@ class ProductByCategoryNotifier extends AsyncNotifier<List<ProductLine>> {
   @override
   Future<List<ProductLine>> build() async {
     // Only fetch data if the current state is null or empty
+
     if (state.value == null || state.value!.isEmpty) {
       return initFetch();
     }
     return [...state.value!];
   }
+
+  // void dispose() {
+  //   ref.onDispose(() async {
+  //     ref.invalidate(selectedPageNoNotifierProvider);
+  //   });
+  // }
 
   Future<void> loadMore() async {
     ref.read(isLastPageProvider.notifier).setLoadingTrue();
@@ -35,7 +45,9 @@ class ProductByCategoryNotifier extends AsyncNotifier<List<ProductLine>> {
       final List<ProductLine> next = await Future.delayed(
         const Duration(seconds: 3),
         () {
-          return repository.getProductByCategory(ref: ref);
+          return repository.getProductByCategory(
+            ref: ref,
+          );
         },
       );
 

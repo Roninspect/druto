@@ -32,7 +32,11 @@ class CheckoutController extends StateNotifier<bool> {
     final basicRes = await checkoutRepository.placeBasicOrder(order);
 
     basicRes.fold((l) {
-      showSnackbar(context: context, text: l.message);
+      showSnackbar(
+          leadingIcon: Icons.warning_amber,
+          context: context,
+          text: l.message,
+          backgroundColor: Colors.red);
     }, (r) async {
       List<OrderProducts> list = items
           .map((e) {
@@ -52,7 +56,11 @@ class CheckoutController extends StateNotifier<bool> {
       state = false;
 
       itemsRes.fold((l) {
-        showSnackbar(context: context, text: l.message);
+        showSnackbar(
+            leadingIcon: Icons.warning_amber,
+            context: context,
+            text: l.message,
+            backgroundColor: Colors.red);
       }, (r) async {
         final sharefPref = await SharedPreferences.getInstance();
 
@@ -61,7 +69,11 @@ class CheckoutController extends StateNotifier<bool> {
         ref.invalidate(getlocalCartItemsProvider);
         if (mounted) {
           context.pop();
-          showSnackbar(context: context, text: "Order Confirmed Successfully");
+          showSnackbar(
+              leadingIcon: Icons.done,
+              context: context,
+              text: "Order Confirmed Successfully",
+              backgroundColor: Colors.green);
         }
       });
     });
