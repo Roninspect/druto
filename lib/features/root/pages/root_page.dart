@@ -40,7 +40,7 @@ class _RootPageState extends ConsumerState<RootPage>
         bottomNavigationBar: TabBar(
             labelPadding: const EdgeInsets.symmetric(vertical: 6),
             labelColor: primaryColor,
-            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
             indicator: const UnderlineTabIndicator(
               borderSide: BorderSide(color: primaryColor, width: 3.0),
               insets: EdgeInsets.fromLTRB(35.0, 0.0, 35.0, 55.0),
@@ -67,7 +67,7 @@ class _RootPageState extends ConsumerState<RootPage>
                   radius: 30,
                   backgroundColor: primaryColor,
                   child: Icon(
-                    Icons.shopping_bag,
+                    MaterialCommunityIcons.cart,
                     color: Colors.white,
                   ),
                 ),

@@ -77,7 +77,6 @@ class PopularProductsListview extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   final ProductLine productLine = productLines[index];
-
                   return AsyncValueWidget(
                     value: ref.watch(isInCartProvider(productLine.id!)),
                     data: (p0) => Padding(

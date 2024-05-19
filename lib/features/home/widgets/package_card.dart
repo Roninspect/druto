@@ -21,8 +21,8 @@ import 'package:druto/routes/router.dart';
 class PackageCard extends ConsumerStatefulWidget {
   final PackageLine packageLine;
   final bool isInCart;
-  Cart? cart;
-  PackageCard({
+  final Cart? cart;
+  const PackageCard({
     super.key,
     required this.packageLine,
     required this.isInCart,
@@ -128,47 +128,50 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                             color: Colors.grey),
                       ),
                       SizedBox(width: context.width * 0.05),
-                      widget.isInCart
-                          ? const SizedBox.shrink()
-                          : InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  isLoading = true;
-                                });
-
-                                await ref
-                                    .read(cartControllerProvider.notifier)
-                                    .addToCart(
-                                      Cart(
-                                        id: widget.packageLine.package!.id,
-                                        pckg_id: widget.packageLine.package!.id,
-                                        quantity: 1,
-                                      ),
-                                    );
-
-                                ref.invalidate(isPackageInCartProvider(
-                                    widget.packageLine.package!.id!));
-
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              },
-                              child: CircleAvatar(
-                                radius: context.height * 0.02,
-                                backgroundColor: primaryColor,
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: context.height * 0.03,
-                                ),
-                              ),
-                            ),
                     ],
                   );
                 },
               ),
               widget.cart == null && !widget.isInCart
-                  ? const SizedBox.shrink()
+                  ? InkWell(
+                      onTap: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        await ref
+                            .read(cartControllerProvider.notifier)
+                            .addToCart(
+                              Cart(
+                                id: widget.packageLine.package!.id,
+                                pckg_id: widget.packageLine.package!.id,
+                                quantity: 1,
+                              ),
+                            );
+
+                        ref.invalidate(isPackageInCartProvider(
+                            widget.packageLine.package!.id!));
+
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                      child: Container(
+                        width: context.width * 0.4,
+                        height: context.height * 0.04,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.green, width: 2),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: const Center(
+                            child: Text(
+                          "Add To Cart",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    )
                   : Container(
                       width: 150,
                       height: 30,

@@ -72,7 +72,7 @@ class _ProductsListByCategoryState
               },
               icon: const Icon(Icons.arrow_back)),
           title: Text(widget.name),
-          toolbarHeight: 60,
+          toolbarHeight: context.height * 0.07,
           bottom:
               const PreferredSize(preferredSize: Size(0, 0), child: Divider()),
         ),
@@ -106,25 +106,34 @@ class _ProductsListByCategoryState
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
-                                        crossAxisSpacing: 5,
+                                        mainAxisExtent: 238,
                                       ),
                                       itemBuilder: (context, index) {
                                         final ProductLine productLine =
                                             data[index];
 
-                                        print(data[0]);
-
                                         return AsyncValueWidget(
                                           value: ref.watch(isInCartProvider(
                                               productLine.id!)),
                                           data: (p0) => Padding(
-                                            padding: const EdgeInsets.all(7.0),
-                                            child: ProductCard(
-                                              productLine: productLine,
-                                              isInCart:
-                                                  p0 == null ? false : true,
-                                            ),
-                                          ),
+                                              padding:
+                                                  const EdgeInsets.all(7.0),
+                                              child: AsyncValueWidget(
+                                                value: ref.watch(
+                                                    isInCartProvider(
+                                                        productLine.id!)),
+                                                data: (p0) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(7.0),
+                                                  child: ProductCard(
+                                                    productLine: productLine,
+                                                    isInCart: p0 == null
+                                                        ? false
+                                                        : true,
+                                                    cart: p0 ?? p0,
+                                                  ),
+                                                ),
+                                              )),
                                         );
                                       },
                                     ),

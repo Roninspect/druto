@@ -1,3 +1,4 @@
+import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +12,7 @@ class OfferBanner extends ConsumerWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          height: 180,
+          height: context.height * 0.2,
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: Image.network(

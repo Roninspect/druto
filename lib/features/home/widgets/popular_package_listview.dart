@@ -69,7 +69,7 @@ class PopularPackageListview extends ConsumerWidget {
         AsyncValueWidget(
           value: ref.watch(getPackagesByHubIdProvider(hId: hub.id!)),
           data: (packages) => SizedBox(
-            height: context.height * 0.29,
+            height: context.height * 0.3,
             child: ListView.builder(
               itemCount: packages.length,
               scrollDirection: Axis.horizontal,
@@ -80,10 +80,13 @@ class PopularPackageListview extends ConsumerWidget {
                   value: ref
                       .watch(isPackageInCartProvider(packageLine.package!.id!)),
                   data: (p0) {
-                    return PackageCard(
-                      packageLine: packageLine,
-                      isInCart: p0 == null ? false : true,
-                      cart: p0 ?? p0,
+                    return SizedBox(
+                      height: 10,
+                      child: PackageCard(
+                        packageLine: packageLine,
+                        isInCart: p0 == null ? false : true,
+                        cart: p0 ?? p0,
+                      ),
                     );
                   },
                 );

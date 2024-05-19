@@ -51,7 +51,7 @@ class _ProductImageCarouselState extends ConsumerState<OfferSlider> {
                       .notifier)
                   .changeIndex(index);
             },
-            height: context.height * 0.225,
+            height: context.height * 0.23,
           ),
         ),
         AnimatedSmoothIndicator(

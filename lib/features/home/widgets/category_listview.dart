@@ -67,7 +67,7 @@ class CategoryListView extends ConsumerWidget {
                             });
                       },
                       child: CircleAvatar(
-                        radius: 35,
+                        radius: 28 * (context.width / 360),
                         backgroundImage: NetworkImage(category.pic!),
                       ),
                     ),

@@ -1,9 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:druto/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/theme/theme.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
@@ -15,8 +12,8 @@ import 'package:druto/routes/router.dart';
 class ProductCard extends ConsumerStatefulWidget {
   final ProductLine productLine;
   final bool isInCart;
-  Cart? cart;
-  ProductCard({
+  final Cart? cart;
+  const ProductCard({
     super.key,
     required this.productLine,
     required this.isInCart,
@@ -51,7 +48,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
               children: [
                 Image.network(
                   widget.productLine.products!.pic,
-                  height: context.height * 0.09,
+                  height: context.height * 0.08,
                   fit: BoxFit.contain,
                 ),
                 SizedBox(height: context.height * 0.005),
@@ -74,7 +71,6 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                 ),
                 SizedBox(height: context.height * 0.005),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "৳$finalSum",
@@ -96,52 +92,89 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                     SizedBox(
                       width: context.width * 0.05,
                     ),
-                    widget.isInCart
-                        ? const SizedBox.shrink()
-                        : InkWell(
-                            onTap: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
+                    // widget.isInCart
+                    //     ? const SizedBox.shrink()
+                    //     : InkWell(
+                    //         onTap: () async {
+                    //           setState(() {
+                    //             isLoading = true;
+                    //           });
 
-                              await ref
-                                  .read(cartControllerProvider.notifier)
-                                  .addToCart(
-                                    Cart(
-                                      id: widget.productLine.id,
-                                      p_id: widget.productLine.pId,
-                                      pl_id: widget.productLine.id!,
-                                      quantity: 1,
-                                    ),
-                                  );
+                    //           await ref
+                    //               .read(cartControllerProvider.notifier)
+                    //               .addToCart(
+                    //                 Cart(
+                    //                   id: widget.productLine.id,
+                    //                   p_id: widget.productLine.pId,
+                    //                   pl_id: widget.productLine.id!,
+                    //                   quantity: 1,
+                    //                 ),
+                    //               );
 
-                              ref.invalidate(
-                                  isInCartProvider(widget.productLine.id!));
+                    //           ref.invalidate(
+                    //               isInCartProvider(widget.productLine.id!));
 
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                            child: CircleAvatar(
-                              radius: context.height * 0.02,
-                              backgroundColor: primaryColor,
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: context.height * 0.03,
-                              ),
-                            ),
-                          )
+                    //           setState(() {
+                    //             isLoading = false;
+                    //           });
+                    //         },
+                    //         child: CircleAvatar(
+                    //           radius: 20,
+                    //           backgroundColor: primaryColor,
+                    //           child: Icon(
+                    //             Icons.add,
+                    //             color: Colors.white,
+                    //             size: context.height * 0.03,
+                    //           ),
+                    //         ),
+                    //       )
                   ],
                 ),
               ],
             ),
           ),
           widget.cart == null && !widget.isInCart
-              ? const SizedBox.shrink()
+              ? InkWell(
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    await ref.read(cartControllerProvider.notifier).addToCart(
+                          Cart(
+                            id: widget.productLine.id,
+                            p_id: widget.productLine.pId,
+                            pl_id: widget.productLine.id!,
+                            quantity: 1,
+                          ),
+                        );
+
+                    ref.invalidate(isInCartProvider(widget.productLine.id!));
+
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                  child: Container(
+                    width: context.width * 0.4,
+                    height: context.height * 0.04,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.green, width: 2),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: const Center(
+                        child: Text(
+                      "Add To Cart",
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                  ),
+                )
               : Container(
-                  width: 150,
-                  height: 30,
+                  width: context.width * 0.4,
+                  height: context.height * 0.04,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.green, width: 2),
                       borderRadius: BorderRadius.circular(5)),
