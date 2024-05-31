@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:druto/core/helpers/custom_snackbar.dart';
-import 'package:druto/core/theme/theme.dart';
 import 'package:druto/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +27,7 @@ class CartController extends StateNotifier<bool> {
       } else {}
       ref.invalidate(getlocalCartItemsProvider);
       localIds.pl_id == null
-          ? ref.invalidate(isPackageInCartProvider(localIds.pckg_id!))
+          ? ref.invalidate(isPackageInCartProvider(localIds.pckgl_id!))
           : ref.invalidate(isInCartProvider(localIds.pl_id!));
 
       state = false;
@@ -36,10 +35,10 @@ class CartController extends StateNotifier<bool> {
   }
 
   Future<void> incrementItem(
-      {int? plId, int? pckg_id, required BuildContext context}) async {
+      {int? plId, int? pckgl_id, required BuildContext context}) async {
     state = true;
     final res = await localCartRepository.incrementItem(
-        plId: plId ?? plId, pckgId: pckg_id ?? pckg_id);
+        plId: plId ?? plId, pckglId: pckgl_id ?? pckgl_id);
     state = false;
     res.fold(
         (l) => showSnackbar(
@@ -49,7 +48,7 @@ class CartController extends StateNotifier<bool> {
             backgroundColor: Colors.red), (r) {
       ref.invalidate(getlocalCartItemsProvider);
       plId == null
-          ? ref.invalidate(isPackageInCartProvider(pckg_id!))
+          ? ref.invalidate(isPackageInCartProvider(pckgl_id!))
           : ref.invalidate(isInCartProvider(plId));
     });
   }

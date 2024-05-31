@@ -29,6 +29,7 @@ class CartPage extends ConsumerWidget {
             ? ref.watch(getlocalCartItemsProvider)
             : ref.watch(getlocalCartItemsProvider),
         data: (carts) {
+          print("our carts: $carts");
           return carts.isEmpty
               ? Center(
                   child: Column(
@@ -64,17 +65,16 @@ class CartPage extends ConsumerWidget {
                                 itemCount: carts.length,
                                 separatorBuilder: (context, index) =>
                                     const Divider(
-                                        endIndent: 20,
-                                        indent: 20,
-                                        thickness: 0.6),
+                                  endIndent: 20,
+                                  indent: 20,
+                                  thickness: 0.6,
+                                ),
                                 itemBuilder: (context, index) {
                                   final Cart cart = carts[index];
 
                                   return cart.pl_id != null
                                       ? ProductCartItem(cart)
-                                      : PackageCartItem(
-                                          cart: cart,
-                                        );
+                                      : PackageCartItem(cart: cart);
                                 },
                               ),
                             ),

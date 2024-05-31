@@ -260,7 +260,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                         value: ref.watch(
                                             getPackagesByIdProvider(
                                                 hubId: hub.id!,
-                                                pckg_id: cart.pckg_id!)),
+                                                pckg_id: cart.pckgl_id!)),
                                         data: (package) => AsyncValueWidget(
                                             value: ref.watch(
                                                 getPackageItemsProvider(

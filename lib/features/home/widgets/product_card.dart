@@ -1,3 +1,4 @@
+import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,13 +62,15 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                     style: TextStyle(
                         fontSize: context.f15,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black54),
+                        color: Colors.black),
                   ),
                 ),
                 Text(
                   widget.productLine.products!.weight,
                   style: TextStyle(
-                      fontSize: context.f15, fontWeight: FontWeight.w600),
+                      fontSize: context.f15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54),
                 ),
                 SizedBox(height: context.height * 0.005),
                 Row(
@@ -165,7 +168,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                         child: Text(
                       "Add To Cart",
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 15,
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -224,13 +227,26 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          ref
-                              .read(cartControllerProvider.notifier)
-                              .incrementItem(
-                                  plId: widget.cart!.pl_id!, context: context);
+                          if (widget.cart!.quantity <
+                              widget.productLine.limit) {
+                            ref
+                                .read(cartControllerProvider.notifier)
+                                .incrementItem(
+                                    plId: widget.cart!.pl_id!,
+                                    context: context);
 
-                          ref.invalidate(
-                              isInCartProvider(widget.productLine.id!));
+                            ref.invalidate(
+                                isInCartProvider(widget.productLine.id!));
+                          } else {
+                            showSnackbar(
+                              context: context,
+                              inTop: true,
+                              text:
+                                  "You can add ${widget.productLine.limit} ${widget.productLine.products!.name} per order",
+                              leadingIcon: Icons.info,
+                              backgroundColor: Colors.green,
+                            );
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(2),

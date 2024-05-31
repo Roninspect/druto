@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
-import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/models/package_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
-
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/core/theme/theme.dart';
@@ -15,7 +14,6 @@ import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/cart.dart';
 import 'package:druto/models/hub.dart';
-import 'package:druto/models/package.dart';
 import 'package:druto/routes/router.dart';
 
 class PackageCard extends ConsumerStatefulWidget {
@@ -139,18 +137,26 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                           isLoading = true;
                         });
 
+                        print("ATC: ${Cart(
+                          id: widget.packageLine.id,
+                          pckgl_id: widget.packageLine.id,
+                          pckg_id: widget.packageLine.pckg_id,
+                          quantity: 1,
+                        )}");
+
                         await ref
                             .read(cartControllerProvider.notifier)
                             .addToCart(
                               Cart(
-                                id: widget.packageLine.package!.id,
-                                pckg_id: widget.packageLine.package!.id,
+                                id: widget.packageLine.id,
+                                pckgl_id: widget.packageLine.id,
+                                pckg_id: widget.packageLine.pckg_id,
                                 quantity: 1,
                               ),
                             );
 
-                        ref.invalidate(isPackageInCartProvider(
-                            widget.packageLine.package!.id!));
+                        ref.invalidate(
+                            isPackageInCartProvider(widget.packageLine.id!));
 
                         setState(() {
                           isLoading = false;
@@ -166,15 +172,15 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                             child: Text(
                           "Add To Cart",
                           style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 15,
                               color: primaryColor,
                               fontWeight: FontWeight.bold),
                         )),
                       ),
                     )
                   : Container(
-                      width: 150,
-                      height: 30,
+                      width: context.width * 0.4,
+                      height: context.height * 0.04,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.green, width: 2),
                           borderRadius: BorderRadius.circular(5)),
@@ -187,18 +193,18 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                                 ref
                                     .read(cartControllerProvider.notifier)
                                     .decrementItem(
-                                        pckg_id: widget.cart!.pckg_id!,
+                                        pckg_id: widget.cart!.pckgl_id!,
                                         context: context);
                                 ref.invalidate(isPackageInCartProvider(
-                                    widget.packageLine.package!.id!));
+                                    widget.packageLine.id!));
                               } else {
                                 ref
                                     .read(cartControllerProvider.notifier)
                                     .removeItemFromCart(
                                         context: context,
-                                        pckgId: widget.cart!.pckg_id);
+                                        pckgId: widget.cart!.pckgl_id);
                                 ref.invalidate(isPackageInCartProvider(
-                                    widget.packageLine.package!.id!));
+                                    widget.packageLine.id!));
                               }
                             },
                             child: Container(
@@ -225,14 +231,29 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              ref
-                                  .read(cartControllerProvider.notifier)
-                                  .incrementItem(
-                                      pckg_id: widget.cart!.pckg_id!,
-                                      context: context);
+                              if (widget.cart!.quantity <
+                                  widget.packageLine.limit!) {
+                                ref
+                                    .read(cartControllerProvider.notifier)
+                                    .incrementItem(
+                                        pckgl_id: widget.cart!.pckgl_id!,
+                                        context: context);
 
-                              ref.invalidate(isPackageInCartProvider(
-                                  widget.packageLine.package!.id!));
+                                ref.invalidate(isPackageInCartProvider(
+                                    widget.packageLine.id!));
+                              } else {
+                                showSnackbar(
+                                  context: context,
+                                  inTop: true,
+                                  text:
+                                      "You can add ${widget.packageLine.limit} ${widget.packageLine.package!.name} per order",
+                                  leadingIcon: Icons.info,
+                                  backgroundColor: Colors.green,
+                                );
+
+                                ref.invalidate(isPackageInCartProvider(
+                                    widget.packageLine.id!));
+                              }
                             },
                             child: Container(
                               padding: const EdgeInsets.all(2),

@@ -133,6 +133,8 @@ class HomeRepository {
           .eq('h_id', hubId)
           .order('created_at', ascending: false);
 
+      print("packages $res");
+
       List<PackageLine> packages =
           res.map((e) => PackageLine.fromMap(e)).toList();
 
@@ -150,7 +152,7 @@ class HomeRepository {
       final res = await client
           .from('package_line')
           .select('*, packages!inner(*)')
-          .eq('packages.id', pckg_id)
+          .eq('id', pckg_id)
           .eq('h_id', hubId)
           .order('created_at', ascending: false)
           .single();

@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:druto/core/helpers/failure.dart';
 import 'package:druto/core/helpers/typedefs.dart';
-import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/models/cart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -22,9 +21,9 @@ final isInCartProvider = FutureProvider.family<Cart?, int>((ref, plId) async {
       );
 });
 final isPackageInCartProvider =
-    FutureProvider.family<Cart?, int>((ref, pckgId) async {
+    FutureProvider.family<Cart?, int>((ref, pckgl_id) async {
   return ref.watch(localCartProvider).isPackageInCart(
-        pckgId: pckgId,
+        pckgl_id: pckgl_id,
       );
 });
 
@@ -76,7 +75,7 @@ class LocalCartRepository {
     }
   }
 
-  FutureVoid incrementItem({int? plId, int? pckgId}) async {
+  FutureVoid incrementItem({int? plId, int? pckglId}) async {
     try {
       final sharefPref = await SharedPreferences.getInstance();
 
@@ -89,7 +88,7 @@ class LocalCartRepository {
 
       final itemToBeIncemented = plId != null
           ? convertedList.indexWhere((item) => item.pl_id == plId)
-          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
+          : convertedList.indexWhere((item) => item.pckgl_id == pckglId);
 
       Cart existingItem = convertedList[itemToBeIncemented];
 
@@ -116,7 +115,7 @@ class LocalCartRepository {
 
       final itemToBeIncemented = plId != null
           ? convertedList.indexWhere((item) => item.pl_id == plId)
-          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
+          : convertedList.indexWhere((item) => item.pckgl_id == pckgId);
 
       Cart existingItem = convertedList[itemToBeIncemented];
 
@@ -145,7 +144,7 @@ class LocalCartRepository {
 
       final indexToRemove = plId != null
           ? convertedList.indexWhere((item) => item.pl_id == plId)
-          : convertedList.indexWhere((item) => item.pckg_id == pckgId);
+          : convertedList.indexWhere((item) => item.pckgl_id == pckgId);
 
       if (indexToRemove != -1) {
         convertedList.removeAt(indexToRemove);
@@ -183,7 +182,7 @@ class LocalCartRepository {
     }
   }
 
-  Future<Cart?> isPackageInCart({int? pckgId}) async {
+  Future<Cart?> isPackageInCart({int? pckgl_id}) async {
     try {
       final sharefPref = await SharedPreferences.getInstance();
 
@@ -195,7 +194,7 @@ class LocalCartRepository {
           cartList.map((e) => Cart.fromJson(e)).toList();
 
       final itemIndex = convertedList.indexWhere((item) {
-        return item.pckg_id == pckgId;
+        return item.pckgl_id == pckgl_id;
       });
 
       if (itemIndex == -1) {

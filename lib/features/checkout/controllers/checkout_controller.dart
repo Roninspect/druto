@@ -42,10 +42,16 @@ class CheckoutController extends StateNotifier<bool> {
           .map((e) {
             if (e.pl_id != null) {
               return OrderProducts(
-                  o_id: r, order_type: OrderType.Product, pl_id: e.pl_id);
+                  o_id: r,
+                  order_type: OrderType.Product,
+                  pl_id: e.pl_id,
+                  quantity: e.quantity);
             } else {
               return OrderProducts(
-                  o_id: r, order_type: OrderType.Package, pckg_id: e.pckg_id);
+                  o_id: r,
+                  order_type: OrderType.Package,
+                  pckgl_id: e.pckgl_id,
+                  quantity: e.quantity);
             }
           })
           .whereType<OrderProducts>()
@@ -67,13 +73,21 @@ class CheckoutController extends StateNotifier<bool> {
         await sharefPref.setString("cart", jsonEncode([]));
 
         ref.invalidate(getlocalCartItemsProvider);
+        for (var element in items) {
+          if (element.pl_id != null) {
+            ref.invalidate(isInCartProvider(element.pl_id!));
+          } else {
+            ref.invalidate(isPackageInCartProvider(element.pckgl_id!));
+          }
+        }
         if (mounted) {
           context.pop();
           showSnackbar(
-              leadingIcon: Icons.done,
-              context: context,
-              text: "Order Confirmed Successfully",
-              backgroundColor: Colors.green);
+            leadingIcon: Icons.done,
+            context: context,
+            text: "Order Confirmed Successfully",
+            backgroundColor: Colors.green,
+          );
         }
       });
     });

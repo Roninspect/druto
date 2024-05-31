@@ -1,7 +1,9 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/core/theme/theme.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/models/cart.dart';
 import 'package:druto/routes/router.dart';
@@ -99,9 +101,30 @@ class ProductCartItem extends ConsumerWidget {
                         width: context.width * 0.03,
                       ),
                       GestureDetector(
-                        onTap: () => ref
-                            .read(cartControllerProvider.notifier)
-                            .incrementItem(plId: cart.pl_id!, context: context),
+                        onTap: () {
+                          if (cart.quantity < productLine.limit) {
+                            ref
+                                .read(cartControllerProvider.notifier)
+                                .incrementItem(
+                                    plId: cart.pl_id!, context: context);
+
+                            ref.invalidate(getlocalCartItemsProvider);
+
+                            ref.invalidate(isInCartProvider(productLine.id!));
+                          } else {
+                            showSnackbar(
+                              context: context,
+                              inTop: true,
+                              text:
+                                  "You can add ${productLine.limit} ${productLine.products!.name} per order",
+                              leadingIcon: Icons.info,
+                              backgroundColor: Colors.green,
+                            );
+                            ref.invalidate(getlocalCartItemsProvider);
+
+                            ref.invalidate(isInCartProvider(productLine.id!));
+                          }
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(2),
                           decoration: BoxDecoration(

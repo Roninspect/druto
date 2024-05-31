@@ -97,15 +97,15 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                               finishedStepTextColor: Colors.black87,
                               internalPadding: 0,
                               showLoadingAnimation: false,
-                              stepRadius: 14,
+                              stepRadius: 12,
                               showStepBorder: false,
                               steps: [
                                 EasyStep(
                                   customStep: CircleAvatar(
-                                    radius: 14,
+                                    radius: 12,
                                     backgroundColor: Colors.white,
                                     child: CircleAvatar(
-                                      radius: 12,
+                                      radius: 10,
                                       backgroundColor:
                                           getStep(order.delivery_status!) >= 0
                                               ? Colors.amber
@@ -121,10 +121,10 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                 ),
                                 EasyStep(
                                   customStep: CircleAvatar(
-                                    radius: 15,
+                                    radius: 12,
                                     backgroundColor: Colors.white,
                                     child: CircleAvatar(
-                                      radius: 14,
+                                      radius: 10,
                                       backgroundColor:
                                           getStep(order.delivery_status!) >= 1
                                               ? Colors.blue
@@ -132,7 +132,7 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                     ),
                                   ),
                                   customTitle: const Text(
-                                    'Processing',
+                                    'Picking',
                                     style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600),
@@ -141,10 +141,10 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                 ),
                                 EasyStep(
                                   customStep: CircleAvatar(
-                                    radius: 15,
+                                    radius: 12,
                                     backgroundColor: Colors.white,
                                     child: CircleAvatar(
-                                      radius: 14,
+                                      radius: 10,
                                       backgroundColor:
                                           getStep(order.delivery_status!) >= 2
                                               ? Colors.green
@@ -154,7 +154,7 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                   customTitle: const Text(
                                     'Delivering',
                                     style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w600),
                                   ),
                                 ),
@@ -162,10 +162,10 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                         DeliveryStatus.Cancelled
                                     ? EasyStep(
                                         customStep: CircleAvatar(
-                                          radius: 15,
+                                          radius: 12,
                                           backgroundColor: Colors.white,
                                           child: CircleAvatar(
-                                            radius: 14,
+                                            radius: 10,
                                             backgroundColor: getStep(order
                                                         .delivery_status!) >=
                                                     3
@@ -176,17 +176,17 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                         customTitle: const Text(
                                           'Cancelled',
                                           style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w600),
                                         ),
                                         topTitle: true,
                                       )
                                     : EasyStep(
                                         customStep: CircleAvatar(
-                                          radius: 15,
+                                          radius: 12,
                                           backgroundColor: Colors.white,
                                           child: CircleAvatar(
-                                            radius: 14,
+                                            radius: 10,
                                             backgroundColor: getStep(order
                                                         .delivery_status!) >=
                                                     4
@@ -197,7 +197,7 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                                         customTitle: const Text(
                                           'Delivered',
                                           style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w600),
                                         ),
                                         topTitle: true,

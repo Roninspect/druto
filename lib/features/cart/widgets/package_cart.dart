@@ -1,8 +1,10 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/core/theme/theme.dart';
 import 'package:druto/core/utils/location_selection.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/cart.dart';
@@ -27,10 +29,10 @@ class PackageCartItem extends ConsumerWidget {
 
     return AsyncValueWidget(
       value: ref.watch(
-          getPackagesByIdProvider(hubId: hub.id!, pckg_id: cart.pckg_id!)),
-      data: (package) => AsyncValueWidget(
+          getPackagesByIdProvider(hubId: hub.id!, pckg_id: cart.pckgl_id!)),
+      data: (packageLine) => AsyncValueWidget(
           value: ref.watch(getPackageItemsProvider(
-              pckgId: package.package!.id!, hId: hub.id!)),
+              pckgId: packageLine.package!.id!, hId: hub.id!)),
           data: (packageItems) {
             final sum = packageItems.fold<double>(
                 0,
@@ -43,13 +45,13 @@ class PackageCartItem extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () =>
-                  context.pushNamed(AppRoutes.bundle.name, extra: package),
+                  context.pushNamed(AppRoutes.bundle.name, extra: packageLine),
               child: Container(
                 padding: const EdgeInsets.all(5),
                 child: Row(
                   children: [
                     Image.network(
-                      package.package!.cover,
+                      packageLine.package!.cover,
                       height: context.height * 0.075,
                       width: context.width * 0.15,
                     ),
@@ -60,7 +62,7 @@ class PackageCartItem extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          package.package!.name,
+                          packageLine.package!.name,
                           style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.w600),
                         ),
@@ -79,14 +81,14 @@ class PackageCartItem extends ConsumerWidget {
                                   ref
                                       .read(cartControllerProvider.notifier)
                                       .decrementItem(
-                                          pckg_id: package.pckg_id,
+                                          pckg_id: cart.pckgl_id,
                                           context: context);
                                 } else {
                                   ref
                                       .read(cartControllerProvider.notifier)
                                       .removeItemFromCart(
                                           context: context,
-                                          pckgId: cart.pckg_id);
+                                          pckgId: cart.pckgl_id);
                                 }
                               },
                               child: Container(
@@ -109,11 +111,31 @@ class PackageCartItem extends ConsumerWidget {
                               width: context.width * 0.03,
                             ),
                             GestureDetector(
-                              onTap: () => ref
-                                  .read(cartControllerProvider.notifier)
-                                  .incrementItem(
-                                      pckg_id: package.pckg_id,
-                                      context: context),
+                              onTap: () {
+                                if (cart.quantity < packageLine.limit!) {
+                                  ref
+                                      .read(cartControllerProvider.notifier)
+                                      .incrementItem(
+                                          pckgl_id: cart.pckgl_id,
+                                          context: context);
+                                  ref.invalidate(getlocalCartItemsProvider);
+                                  ref.invalidate(
+                                      isPackageInCartProvider(packageLine.id!));
+                                } else {
+                                  showSnackbar(
+                                    context: context,
+                                    inTop: true,
+                                    text:
+                                        "You can add ${packageLine.limit} ${packageLine.package!.name} per order",
+                                    leadingIcon: Icons.info,
+                                    backgroundColor: Colors.green,
+                                  );
+                                  ref.invalidate(getlocalCartItemsProvider);
+                                  ref.invalidate(
+                                    isPackageInCartProvider(packageLine.id!),
+                                  );
+                                }
+                              },
                               child: Container(
                                 padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
@@ -144,7 +166,7 @@ class PackageCartItem extends ConsumerWidget {
                             ref
                                 .read(cartControllerProvider.notifier)
                                 .removeItemFromCart(
-                                    context: context, pckgId: cart.pckg_id);
+                                    context: context, pckgId: cart.pckgl_id);
                           },
                           child: const Icon(
                             Icons.delete_outline,

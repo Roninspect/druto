@@ -5,6 +5,7 @@ class Cart {
   int? id;
   int? pl_id;
   int? p_id;
+  int? pckgl_id;
   int? pckg_id;
   final int quantity;
   String? uid;
@@ -12,6 +13,7 @@ class Cart {
     this.id,
     this.pl_id,
     this.p_id,
+    this.pckgl_id,
     this.pckg_id,
     required this.quantity,
     this.uid,
@@ -21,6 +23,7 @@ class Cart {
     int? id,
     int? pl_id,
     int? p_id,
+    int? pckgl_id,
     int? pckg_id,
     int? quantity,
     String? uid,
@@ -29,7 +32,8 @@ class Cart {
       id: id ?? this.id,
       pl_id: pl_id ?? this.pl_id,
       p_id: p_id ?? this.p_id,
-      pckg_id: pckg_id ?? this.pckg_id,
+      pckgl_id: pckgl_id ?? this.pckgl_id,
+      pckg_id: pckgl_id ?? this.pckg_id,
       quantity: quantity ?? this.quantity,
       uid: uid ?? this.uid,
     );
@@ -39,6 +43,7 @@ class Cart {
     return <String, dynamic>{
       'pl_id': pl_id,
       'p_id': p_id,
+      'pckgl_id': pckgl_id,
       'pckg_id': pckg_id,
       'quantity': quantity,
       'uid': uid,
@@ -50,6 +55,7 @@ class Cart {
       id: map['id'] != null ? map['id'] as int : null,
       pl_id: map['pl_id'] != null ? map['pl_id'] as int : null,
       p_id: map['p_id'] != null ? map['p_id'] as int : null,
+      pckgl_id: map['pckgl_id'] != null ? map['pckgl_id'] as int : null,
       pckg_id: map['pckg_id'] != null ? map['pckg_id'] as int : null,
       quantity: map['quantity'] as int,
       uid: map['uid'] != null ? map['uid'] as String : null,
@@ -63,7 +69,7 @@ class Cart {
 
   @override
   String toString() {
-    return 'Cart(id: $id, pl_id: $pl_id, p_id: $p_id, pckg_id: $pckg_id, quantity: $quantity, uid: $uid)';
+    return 'Cart(id: $id, pl_id: $pl_id, p_id: $p_id, pckgl_id: $pckgl_id, pckg_id: $pckg_id, quantity: $quantity, uid: $uid)';
   }
 
   @override
@@ -74,6 +80,7 @@ class Cart {
         other.pl_id == pl_id &&
         other.p_id == p_id &&
         other.pckg_id == pckg_id &&
+        other.pckgl_id == pckgl_id &&
         other.uid == uid;
   }
 
@@ -82,6 +89,7 @@ class Cart {
     return id.hashCode ^
         pl_id.hashCode ^
         p_id.hashCode ^
+        pckgl_id.hashCode ^
         pckg_id.hashCode ^
         uid.hashCode;
   }

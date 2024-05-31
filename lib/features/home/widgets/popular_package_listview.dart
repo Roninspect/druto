@@ -77,8 +77,7 @@ class PopularPackageListview extends ConsumerWidget {
                 final PackageLine packageLine = packages[index];
 
                 return AsyncValueWidget(
-                  value: ref
-                      .watch(isPackageInCartProvider(packageLine.package!.id!)),
+                  value: ref.watch(isPackageInCartProvider(packageLine.id!)),
                   data: (p0) {
                     return SizedBox(
                       height: 10,

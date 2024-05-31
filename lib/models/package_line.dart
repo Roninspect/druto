@@ -8,12 +8,15 @@ class PackageLine {
   final int pckg_id;
   final int h_id;
   final bool is_active;
+  int? limit;
   Package? package;
+
   PackageLine({
     this.id,
     required this.pckg_id,
     required this.h_id,
     required this.is_active,
+    this.limit,
     this.package,
   });
 
@@ -22,6 +25,7 @@ class PackageLine {
     int? pckg_id,
     int? h_id,
     bool? is_active,
+    int? limit,
     Package? package,
   }) {
     return PackageLine(
@@ -29,6 +33,7 @@ class PackageLine {
       pckg_id: pckg_id ?? this.pckg_id,
       h_id: h_id ?? this.h_id,
       is_active: is_active ?? this.is_active,
+      limit: limit ?? this.limit,
       package: package ?? this.package,
     );
   }
@@ -38,6 +43,7 @@ class PackageLine {
       'pckg_id': pckg_id,
       'h_id': h_id,
       'is_active': is_active,
+      'limit': limit,
     };
   }
 
@@ -47,6 +53,7 @@ class PackageLine {
       pckg_id: map['pckg_id'] as int,
       h_id: map['h_id'] as int,
       is_active: map['is_active'] as bool,
+      limit: map['limit'] != null ? map['limit'] as int : null,
       package: map['packages'] != null
           ? Package.fromMap(map['packages'] as Map<String, dynamic>)
           : null,
@@ -60,7 +67,7 @@ class PackageLine {
 
   @override
   String toString() {
-    return 'PackageLine(id: $id, pckg_id: $pckg_id, h_id: $h_id, is_active: $is_active, package: $package)';
+    return 'PackageLine(id: $id, pckg_id: $pckg_id, h_id: $h_id, is_active: $is_active, limit: $limit, package: $package)';
   }
 
   @override
@@ -71,6 +78,7 @@ class PackageLine {
         other.pckg_id == pckg_id &&
         other.h_id == h_id &&
         other.is_active == is_active &&
+        other.limit == limit &&
         other.package == package;
   }
 
@@ -80,6 +88,7 @@ class PackageLine {
         pckg_id.hashCode ^
         h_id.hashCode ^
         is_active.hashCode ^
+        limit.hashCode ^
         package.hashCode;
   }
 }
