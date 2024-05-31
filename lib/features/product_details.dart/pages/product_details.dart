@@ -208,15 +208,30 @@ class ProductDetailsPage extends ConsumerWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          ref
-                                              .read(cartControllerProvider
-                                                  .notifier)
-                                              .incrementItem(
-                                                  plId: cart.pl_id!,
-                                                  context: context);
+                                          if (cart.quantity <
+                                              productLine.limit) {
+                                            ref
+                                                .read(cartControllerProvider
+                                                    .notifier)
+                                                .incrementItem(
+                                                    plId: cart.pl_id!,
+                                                    context: context);
 
-                                          ref.invalidate(isInCartProvider(
-                                              productLine.id!));
+                                            ref.invalidate(isInCartProvider(
+                                                productLine.id!));
+                                          } else {
+                                            showSnackbar(
+                                              context: context,
+                                              inTop: true,
+                                              text:
+                                                  "You can add ${productLine.limit} ${productLine.products!.name} per order",
+                                              leadingIcon: Icons.info,
+                                              backgroundColor: Colors.green,
+                                            );
+
+                                            ref.invalidate(isInCartProvider(
+                                                productLine.id!));
+                                          }
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(10),

@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:go_router/go_router.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -67,7 +69,7 @@ class HomePage extends ConsumerWidget {
                   title: const AddressBar(),
                   actions: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () => context.pushNamed(AppRoutes.search.name),
                       child: const Icon(
                         Ionicons.search,
                         size: 27,

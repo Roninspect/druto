@@ -59,15 +59,17 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
               ? const Center(
                   child: Text("No Ongoing Order"),
                 )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      final order = orders[index];
-                      return ListTile(
+              : ListView.separated(
+                  padding: const EdgeInsets.all(10),
+                  itemCount: orders.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
                         onTap: () {},
-                        tileColor: const Color.fromARGB(69, 158, 158, 158),
+                        tileColor: Colors.grey[100],
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -206,9 +208,9 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
         ));
   }

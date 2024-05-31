@@ -32,18 +32,20 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-            centerTitle: true,
-            titleTextStyle: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-                fontSize: 22)),
-        useMaterial3: true,
+    return SafeArea(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+              centerTitle: true,
+              titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  fontSize: 22)),
+          useMaterial3: true,
+        ),
+        routerConfig: router,
       ),
-      routerConfig: router,
     );
   }
 }

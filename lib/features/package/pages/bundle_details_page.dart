@@ -1,4 +1,5 @@
 import 'package:druto/core/helpers/async_value_helper.dart';
+import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
@@ -237,18 +238,35 @@ class BundleDetailsPage extends ConsumerWidget {
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    ref
-                                                        .read(
-                                                            cartControllerProvider
-                                                                .notifier)
-                                                        .incrementItem(
-                                                            pckgl_id:
-                                                                cart.pckgl_id!,
-                                                            context: context);
+                                                    if (cart.quantity <
+                                                        packageLine.limit!) {
+                                                      ref
+                                                          .read(
+                                                              cartControllerProvider
+                                                                  .notifier)
+                                                          .incrementItem(
+                                                              pckgl_id: cart
+                                                                  .pckgl_id!,
+                                                              context: context);
 
-                                                    ref.invalidate(
-                                                        isPackageInCartProvider(
-                                                            cart.pckgl_id!));
+                                                      ref.invalidate(
+                                                          isPackageInCartProvider(
+                                                              cart.pckgl_id!));
+                                                    } else {
+                                                      showSnackbar(
+                                                        context: context,
+                                                        inTop: true,
+                                                        text:
+                                                            "You can add ${packageLine.limit} ${packageLine.package!.name} per order",
+                                                        leadingIcon: Icons.info,
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      );
+
+                                                      ref.invalidate(
+                                                          isPackageInCartProvider(
+                                                              cart.pckgl_id!));
+                                                    }
                                                   },
                                                   child: Container(
                                                     padding:

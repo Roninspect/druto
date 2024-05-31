@@ -246,6 +246,8 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                               leadingIcon: Icons.info,
                               backgroundColor: Colors.green,
                             );
+                            ref.invalidate(
+                                isInCartProvider(widget.productLine.id!));
                           }
                         },
                         child: Container(

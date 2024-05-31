@@ -21,7 +21,7 @@ final orderRepositoryProvider = Provider<OrderRepository>.internal(
 );
 
 typedef OrderRepositoryRef = ProviderRef<OrderRepository>;
-String _$getGuestOrdersHash() => r'280c2ee58b4d8a27903b37e154524f25e78e212a';
+String _$getGuestOrdersHash() => r'f894c7846ef87ad31e099367211810659c4282cc';
 
 /// Copied from Dart SDK
 class _SystemHash {
