@@ -9,6 +9,7 @@ class PackageLine {
   final int h_id;
   final bool is_active;
   int? limit;
+  int discount;
   Package? package;
 
   PackageLine({
@@ -17,6 +18,7 @@ class PackageLine {
     required this.h_id,
     required this.is_active,
     this.limit,
+    required this.discount,
     this.package,
   });
 
@@ -27,15 +29,16 @@ class PackageLine {
     bool? is_active,
     int? limit,
     Package? package,
+    int? discount,
   }) {
     return PackageLine(
-      id: id ?? this.id,
-      pckg_id: pckg_id ?? this.pckg_id,
-      h_id: h_id ?? this.h_id,
-      is_active: is_active ?? this.is_active,
-      limit: limit ?? this.limit,
-      package: package ?? this.package,
-    );
+        id: id ?? this.id,
+        pckg_id: pckg_id ?? this.pckg_id,
+        h_id: h_id ?? this.h_id,
+        is_active: is_active ?? this.is_active,
+        limit: limit ?? this.limit,
+        package: package ?? this.package,
+        discount: discount ?? this.discount);
   }
 
   Map<String, dynamic> toMap() {
@@ -44,6 +47,7 @@ class PackageLine {
       'h_id': h_id,
       'is_active': is_active,
       'limit': limit,
+      'discount': discount
     };
   }
 
@@ -54,6 +58,7 @@ class PackageLine {
       h_id: map['h_id'] as int,
       is_active: map['is_active'] as bool,
       limit: map['limit'] != null ? map['limit'] as int : null,
+      discount: map['discount'] as int,
       package: map['packages'] != null
           ? Package.fromMap(map['packages'] as Map<String, dynamic>)
           : null,
@@ -67,7 +72,7 @@ class PackageLine {
 
   @override
   String toString() {
-    return 'PackageLine(id: $id, pckg_id: $pckg_id, h_id: $h_id, is_active: $is_active, limit: $limit, package: $package)';
+    return 'PackageLine(id: $id, pckg_id: $pckg_id, h_id: $h_id, is_active: $is_active, limit: $limit,discount: $discount, package: $package)';
   }
 
   @override
@@ -79,6 +84,7 @@ class PackageLine {
         other.h_id == h_id &&
         other.is_active == is_active &&
         other.limit == limit &&
+        other.discount == discount &&
         other.package == package;
   }
 
@@ -89,6 +95,7 @@ class PackageLine {
         h_id.hashCode ^
         is_active.hashCode ^
         limit.hashCode ^
+        discount.hashCode ^
         package.hashCode;
   }
 }

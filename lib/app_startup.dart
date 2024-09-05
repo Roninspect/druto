@@ -30,7 +30,9 @@ class AppStartupWidget extends ConsumerWidget {
                   error: (e, stk) {
                     return AppStartupErrorWidget(
                       message: stk.toString(),
-                      onRetry: () {},
+                      onRetry: () {
+                        ref.invalidate(aappstartupProvider);
+                      },
                     );
                   },
                 );

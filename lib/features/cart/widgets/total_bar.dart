@@ -41,24 +41,37 @@ class TotalBar extends ConsumerWidget {
     final hub = isLocationWithinAnyHub(
         hubs: hubs,
         location: LatLng(position!.latitude, position.longitude))[0];
+
     num getTotalItemPrice({required List<Cart> carts, required int hubId}) {
       num sum = 0;
-      for (var element in carts) {
-        element.pl_id == null
+      for (var cart in carts) {
+        cart.pl_id == null
             ? ref
-                .watch(getPackageItemsProvider(
-                    pckgId: element.pckg_id!, hId: hubId))
+                .watch(
+                    getPackageItemsProvider(pckgId: cart.pckg_id!, hId: hubId))
                 .when(
                 data: (packageItems) {
-                  final packsum = packageItems.fold<double>(
-                      0,
-                      (value, package) =>
-                          value +
-                          (package.product_line!.discountedPrice == 0
-                              ? package.product_line!.price * element.quantity
-                              : (package.product_line!.price -
-                                      package.product_line!.discountedPrice) *
-                                  element.quantity));
+                  double packsum = 0;
+                  ref
+                      .watch(getPackagesByIdProvider(
+                          hubId: hubId, pckg_id: cart.pckgl_id!))
+                      .when(
+                        data: (pckgLine) {
+                          packsum = (packageItems.fold<double>(
+                                      0,
+                                      (value, element) =>
+                                          value +
+                                          (element.product_line!.price -
+                                                  element.product_line!
+                                                      .discountedPrice) *
+                                              element.item_quantity) -
+                                  pckgLine.discount) *
+                              cart.quantity;
+                        },
+                        error: (error, stackTrace) => packsum = 0,
+                        loading: () => packsum = 0,
+                      );
+
                   sum += packsum;
                 },
                 error: (error, stackTrace) {
@@ -68,11 +81,11 @@ class TotalBar extends ConsumerWidget {
                   return 0;
                 },
               )
-            : ref.watch(getProductLineByIdProvider(plId: element.pl_id!)).when(
+            : ref.watch(getProductLineByIdProvider(plId: cart.pl_id!)).when(
                 data: (data) {
-                  num itemPrice = data.discountedPrice != 0
-                      ? (data.price - data.discountedPrice) * element.quantity
-                      : data.price * element.quantity;
+                  num itemPrice =
+                      (data.price - data.discountedPrice) * cart.quantity;
+
                   sum += itemPrice; // Accumulate the sum here
                 },
                 error: (error, stackTrace) {

@@ -8,10 +8,12 @@ class PackageItem {
   final int pckg_id;
   final int p_id;
   final int pl_id;
+  final int item_quantity;
   ProductLine? product_line;
   PackageItem({
     this.id,
     required this.pckg_id,
+    required this.item_quantity,
     required this.p_id,
     required this.pl_id,
     this.product_line,
@@ -22,6 +24,7 @@ class PackageItem {
     int? pckg_id,
     int? p_id,
     int? pl_id,
+    int? item_quantity,
     ProductLine? product_line,
   }) {
     return PackageItem(
@@ -29,6 +32,7 @@ class PackageItem {
       pckg_id: pckg_id ?? this.pckg_id,
       p_id: p_id ?? this.p_id,
       pl_id: pl_id ?? this.pl_id,
+      item_quantity: item_quantity ?? this.item_quantity,
       product_line: product_line ?? this.product_line,
     );
   }
@@ -38,6 +42,7 @@ class PackageItem {
       'pckg_id': pckg_id,
       'p_id': p_id,
       'pl_id': pl_id,
+      "item_quantity": item_quantity
     };
   }
 
@@ -47,6 +52,7 @@ class PackageItem {
       pckg_id: map['pckg_id'] as int,
       p_id: map['p_id'] as int,
       pl_id: map['pl_id'] as int,
+      item_quantity: map['item_quantity'] as int,
       product_line: map['product_line'] != null
           ? ProductLine.fromMap(map['product_line'] as Map<String, dynamic>)
           : null,

@@ -80,13 +80,14 @@ class BundleDetailsPage extends ConsumerWidget {
                         pckgId: package.id!, hId: hub.id!)),
                     data: (packageItems) {
                       final sum = packageItems.fold<double>(
-                          0,
-                          (value, element) =>
-                              value +
-                              (element.product_line!.discountedPrice == 0
-                                  ? element.product_line!.price
-                                  : (element.product_line!.price -
-                                      element.product_line!.discountedPrice)));
+                              0,
+                              (value, element) =>
+                                  value +
+                                  (element.product_line!.price -
+                                          element
+                                              .product_line!.discountedPrice) *
+                                      element.item_quantity) -
+                          packageLine.discount;
                       final mainsum = packageItems.fold<double>(
                           0,
                           (value, element) =>

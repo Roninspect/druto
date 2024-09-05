@@ -7,18 +7,15 @@ class OfferBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: SizedBox(
-          height: context.height * 0.2,
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Image.network(
-              'https://c8.alamy.com/comp/2AKGT04/grocery-shopping-promotional-sale-banner-fast-shopping-cart-full-of-fresh-colorful-food-2AKGT04.jpg',
-              fit: BoxFit.fill,
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: SizedBox(
+        height: context.height * 0.2,
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Image.network(
+            'https://c8.alamy.com/comp/2AKGT04/grocery-shopping-promotional-sale-banner-fast-shopping-cart-full-of-fresh-colorful-food-2AKGT04.jpg',
+            fit: BoxFit.fill,
           ),
         ),
       ),

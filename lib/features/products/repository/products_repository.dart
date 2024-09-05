@@ -36,7 +36,7 @@ class ProductsRepository {
       final range =
           DoubleArgsPaginate(start: pageNo! * 10, end: (pageNo * 10) + 10 - 1);
 
-      final position = ref.watch(getPositionProvider).valueOrNull;
+      final position = ref.read(getPositionProvider).valueOrNull;
 
       final hubs = ref.watch(getHubsProvider).valueOrNull;
 

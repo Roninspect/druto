@@ -1,7 +1,6 @@
 import 'package:druto/models/product_line.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 part 'search_repository.g.dart';
 
 @Riverpod(keepAlive: true)

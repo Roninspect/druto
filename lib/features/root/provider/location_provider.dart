@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'location_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<Position> getPosition(GetPositionRef ref) async {
   bool serviceEnabled;
   LocationPermission permission;
