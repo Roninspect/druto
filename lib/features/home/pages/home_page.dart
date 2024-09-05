@@ -99,13 +99,17 @@ class HomePage extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // offer carousel slider
-                        const OfferSlider(),
+                        const Text(
+                          "Categories",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const CategoryListView(),
                         SizedBox(height: context.height * 0.02),
                         // Category List Builder
 
-                        const CategoryListView(),
                         const PopularPackageListview(),
                         const PopularProductsListview()
                       ],

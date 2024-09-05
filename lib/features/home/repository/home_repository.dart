@@ -74,7 +74,10 @@ class HomeRepository {
 
   Future<List<ProductCategory>> getCategories() async {
     try {
-      final res = await client.from('categories').select('*');
+      final res = await client
+          .from('categories')
+          .select('*')
+          .order("priority", ascending: true);
 
       final List<ProductCategory> categories =
           res.map((e) => ProductCategory.fromMap(e)).toList();

@@ -42,17 +42,30 @@ class CategoryListView extends ConsumerWidget {
         location: LatLng(position!.latitude, position.longitude))[0];
 
     return SizedBox(
-        height: context.height * 0.13,
-        child: AsyncValueWidget(
-          value: ref.watch(getCategoriesProvider),
-          data: (p0) => ListView.builder(
-            itemCount: p0.length,
-            scrollDirection: Axis.horizontal,
+      child: AsyncValueWidget(
+        value: ref.watch(getCategoriesProvider),
+        data: (categories) {
+          int itemCount = categories.length;
+          int crossAxisCount = 4; // Number of columns
+          int rows = (itemCount / crossAxisCount).ceil(); // Total rows needed
+          int totalItemCount =
+              rows * crossAxisCount; // Total grid items including empty slots
+
+          return GridView.builder(
+            itemCount: totalItemCount,
+            scrollDirection: Axis.vertical, // Changed to vertical scrolling
+            shrinkWrap: true,
+            primary: false,
+            reverse: false,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              mainAxisExtent: context.width * totalItemCount * 0.0166,
+            ),
             itemBuilder: (context, index) {
-              final ProductCategory category = p0[index];
-              return Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Column(
+              // Check if index is within the actual number of categories
+              if (index < itemCount) {
+                final ProductCategory category = categories[index];
+                return Column(
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -66,9 +79,16 @@ class CategoryListView extends ConsumerWidget {
                               "id": category.id.toString()
                             });
                       },
-                      child: CircleAvatar(
-                        radius: 28 * (context.width / 360),
-                        backgroundImage: NetworkImage(category.pic!),
+                      child: Container(
+                        height: context.height * 0.09,
+                        width: context.width * 0.20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                        ),
+                        child: Image.network(
+                          category.pic!,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -76,13 +96,19 @@ class CategoryListView extends ConsumerWidget {
                     ),
                     Text(
                       category.name,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
+                    ),
                   ],
-                ),
-              );
+                );
+              } else {
+                // Return an empty container for remaining grid slots
+                return Container();
+              }
             },
-          ),
-        ));
+          );
+        },
+      ),
+    );
   }
 }

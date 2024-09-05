@@ -28,7 +28,7 @@ class _ProductImageCarouselState extends ConsumerState<OfferSlider> {
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 200),
           child: CarouselView(
-            itemExtent: 300,
+            itemExtent: 400,
             padding: const EdgeInsets.all(10.0),
             children: List.generate(
               4,
