@@ -1,3 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:druto/core/helpers/failure.dart';
+import 'package:druto/core/helpers/typedefs.dart';
+import 'package:druto/features/cart/repository/local/local_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:druto/core/utils/location_selection.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/products/providers/page_provider.dart';
@@ -5,16 +15,12 @@ import 'package:druto/features/products/providers/selected_category.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/double_args.dart';
 import 'package:druto/models/product_line.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:maps_toolkit/maps_toolkit.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'products_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 ProductsRepository productsRepository(ProductsRepositoryRef ref) {
-  return ProductsRepository(client: Supabase.instance.client);
+  return ProductsRepository(client: Supabase.instance.client, ref: ref);
 }
 
 @Riverpod(keepAlive: true)
@@ -26,8 +32,10 @@ Future<List<ProductLine>> getProductsByCategory(
 
 class ProductsRepository {
   final SupabaseClient client;
+  final Ref ref;
   ProductsRepository({
     required this.client,
+    required this.ref,
   });
 
   Future<List<ProductLine>> getProductByCategory({required Ref ref}) async {
@@ -45,8 +53,6 @@ class ProductsRepository {
           location: LatLng(position!.latitude, position.longitude))[0];
 
       final categoryId = ref.watch(selectedCategoryProvider);
-
-      print(categoryId);
 
       List<Map<String, dynamic>> res;
 
@@ -66,6 +72,34 @@ class ProductsRepository {
       return products;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  FutureEither<List<Map<String, dynamic>>> deleteInactiveItemFromCart(
+      {required num hubId, int? pl_id, int? pckgL_id}) async {
+    try {
+      if (pl_id != null) {
+        final data = await client
+            .from("product_line")
+            .select()
+            .eq("id", pl_id)
+            .eq("h_id", hubId)
+            .eq('is_active', true);
+
+        return right(data);
+      } else {
+        final data = await client
+            .from("package_line")
+            .select()
+            .eq("id", pckgL_id!)
+            .eq("h_id", hubId)
+            .eq('is_active', true);
+
+        return right(data);
+      }
+    } catch (e, stk) {
+      print(stk);
+      return left(Failure(e.toString()));
     }
   }
 }

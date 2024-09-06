@@ -5,20 +5,40 @@ import 'package:druto/core/theme/theme.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
+import 'package:druto/features/products/controllers/products_controller.dart';
+import 'package:druto/features/products/repository/products_repository.dart';
 import 'package:druto/models/cart.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ProductCartItem extends ConsumerWidget {
+class ProductCartItem extends ConsumerStatefulWidget {
   final Cart cart;
   const ProductCartItem(this.cart, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ProductCartItemState();
+}
+
+class _ProductCartItemState extends ConsumerState<ProductCartItem> {
+  @override
+  void initState() {
+    seeitem();
+    super.initState();
+  }
+
+  seeitem() async {
+    await ref
+        .read(productsControllerProvider.notifier)
+        .deleteInactiveItems(pl_id: widget.cart.pl_id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AsyncValueWidget(
-      value: ref.watch(getProductLineByIdProvider(plId: cart.pl_id!)),
+      value: ref.watch(getProductLineByIdProvider(plId: widget.cart.pl_id!)),
       data: (productLine) {
         final finalSum = productLine.discountedPrice == 0
             ? productLine.price
@@ -69,16 +89,16 @@ class ProductCartItem extends ConsumerWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (cart.quantity > 1) {
+                          if (widget.cart.quantity > 1) {
                             ref
                                 .read(cartControllerProvider.notifier)
                                 .decrementItem(
-                                    plId: cart.pl_id!, context: context);
+                                    plId: widget.cart.pl_id!, context: context);
                           } else {
                             ref
                                 .read(cartControllerProvider.notifier)
                                 .removeItemFromCart(
-                                    context: context, plId: cart.pl_id);
+                                    context: context, plId: widget.cart.pl_id);
                           }
                         },
                         child: Container(
@@ -91,7 +111,7 @@ class ProductCartItem extends ConsumerWidget {
                       ),
                       SizedBox(width: context.width * 0.03),
                       Text(
-                        "${cart.quantity}",
+                        "${widget.cart.quantity}",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -102,11 +122,11 @@ class ProductCartItem extends ConsumerWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (cart.quantity < productLine.limit) {
+                          if (widget.cart.quantity < productLine.limit) {
                             ref
                                 .read(cartControllerProvider.notifier)
                                 .incrementItem(
-                                    plId: cart.pl_id!, context: context);
+                                    plId: widget.cart.pl_id!, context: context);
 
                             ref.invalidate(getlocalCartItemsProvider);
 
@@ -155,7 +175,7 @@ class ProductCartItem extends ConsumerWidget {
                       ref
                           .read(cartControllerProvider.notifier)
                           .removeItemFromCart(
-                              context: context, plId: cart.pl_id);
+                              context: context, plId: widget.cart.pl_id);
                     },
                     child: const Icon(
                       Icons.delete_outline,

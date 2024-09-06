@@ -142,6 +142,8 @@ class LocalCartRepository {
       final List<Cart> convertedList =
           cartList.map((e) => Cart.fromJson(e)).toList();
 
+      print(convertedList);
+
       final indexToRemove = plId != null
           ? convertedList.indexWhere((item) => item.pl_id == plId)
           : convertedList.indexWhere((item) => item.pckgl_id == pckgId);

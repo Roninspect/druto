@@ -6,6 +6,7 @@ import 'package:druto/core/utils/location_selection.dart';
 import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
+import 'package:druto/features/products/controllers/products_controller.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
 import 'package:druto/models/cart.dart';
 import 'package:druto/routes/router.dart';
@@ -14,12 +15,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
 
-class PackageCartItem extends ConsumerWidget {
+class PackageCartItem extends ConsumerStatefulWidget {
   final Cart cart;
   const PackageCartItem({super.key, required this.cart});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _PackageCartItemState();
+}
+
+class _PackageCartItemState extends ConsumerState<PackageCartItem> {
+  @override
+  void initState() {
+    seeitem();
+    super.initState();
+  }
+
+  seeitem() async {
+    await ref
+        .read(productsControllerProvider.notifier)
+        .deleteInactiveItems(pckgL_id: widget.cart.pckgl_id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final position = ref.watch(getPositionProvider).valueOrNull;
     final hubs = ref.watch(getHubsProvider).value;
 
@@ -28,8 +47,8 @@ class PackageCartItem extends ConsumerWidget {
         location: LatLng(position!.latitude, position.longitude))[0];
 
     return AsyncValueWidget(
-      value: ref.watch(
-          getPackagesByIdProvider(hubId: hub.id!, pckg_id: cart.pckgl_id!)),
+      value: ref.watch(getPackagesByIdProvider(
+          hubId: hub.id!, pckg_id: widget.cart.pckgl_id!)),
       data: (packageLine) => AsyncValueWidget(
           value: ref.watch(getPackageItemsProvider(
               pckgId: packageLine.package!.id!, hId: hub.id!)),
@@ -77,18 +96,18 @@ class PackageCartItem extends ConsumerWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (cart.quantity > 1) {
+                                if (widget.cart.quantity > 1) {
                                   ref
                                       .read(cartControllerProvider.notifier)
                                       .decrementItem(
-                                          pckg_id: cart.pckgl_id,
+                                          pckg_id: widget.cart.pckgl_id,
                                           context: context);
                                 } else {
                                   ref
                                       .read(cartControllerProvider.notifier)
                                       .removeItemFromCart(
                                           context: context,
-                                          pckgId: cart.pckgl_id);
+                                          pckgId: widget.cart.pckgl_id);
                                 }
                               },
                               child: Container(
@@ -101,7 +120,7 @@ class PackageCartItem extends ConsumerWidget {
                             ),
                             SizedBox(width: context.width * 0.03),
                             Text(
-                              "${cart.quantity}",
+                              "${widget.cart.quantity}",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -112,11 +131,11 @@ class PackageCartItem extends ConsumerWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (cart.quantity < packageLine.limit!) {
+                                if (widget.cart.quantity < packageLine.limit!) {
                                   ref
                                       .read(cartControllerProvider.notifier)
                                       .incrementItem(
-                                          pckgl_id: cart.pckgl_id,
+                                          pckgl_id: widget.cart.pckgl_id,
                                           context: context);
                                   ref.invalidate(getlocalCartItemsProvider);
                                   ref.invalidate(
@@ -166,7 +185,8 @@ class PackageCartItem extends ConsumerWidget {
                             ref
                                 .read(cartControllerProvider.notifier)
                                 .removeItemFromCart(
-                                    context: context, pckgId: cart.pckgl_id);
+                                    context: context,
+                                    pckgId: widget.cart.pckgl_id);
                           },
                           child: const Icon(
                             Icons.delete_outline,
