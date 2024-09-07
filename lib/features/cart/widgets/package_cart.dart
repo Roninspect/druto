@@ -25,6 +25,7 @@ class PackageCartItem extends ConsumerStatefulWidget {
 }
 
 class _PackageCartItemState extends ConsumerState<PackageCartItem> {
+  bool isLoading = false;
   @override
   void initState() {
     seeitem();
@@ -32,9 +33,16 @@ class _PackageCartItemState extends ConsumerState<PackageCartItem> {
   }
 
   seeitem() async {
+    setState(() {
+      isLoading = true;
+    });
     await ref
         .read(productsControllerProvider.notifier)
         .deleteInactiveItems(pckgL_id: widget.cart.pckgl_id);
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override

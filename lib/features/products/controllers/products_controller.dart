@@ -31,7 +31,11 @@ class ProductsController extends StateNotifier<bool> {
 
             res.fold(
               (l) => print(l.message),
-              (r) => ref.invalidate(getlocalCartItemsProvider),
+              (r) {
+                ref.invalidate(getlocalCartItemsProvider);
+                ref.invalidate(isInCartProvider);
+    
+              },
             );
           }
         },
@@ -49,11 +53,16 @@ class ProductsController extends StateNotifier<bool> {
 
             res.fold(
               (l) => print(l.message),
-              (r) => ref.invalidate(getlocalCartItemsProvider),
+              (r) {
+                ref.invalidate(getlocalCartItemsProvider);
+                ref.invalidate(isPackageInCartProvider);
+         
+              },
             );
           }
         },
       );
     }
+
   }
 }

@@ -112,6 +112,7 @@ class HomeRepository {
       res = await client
           .from("product_line")
           .select("*, products!inner(*)")
+          .eq("is_active", true)
           .eq('c_id', centralId)
           .eq('h_id', hid)
           .order('bought', ascending: false)
