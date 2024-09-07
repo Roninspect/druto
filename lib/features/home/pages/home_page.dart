@@ -1,5 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
+import 'package:druto/features/offers/repository/offer_repository.dart';
+import 'package:druto/features/offers/widgets/OfferCard.dart';
+import 'package:druto/models/Offer.dart';
+import 'package:druto/models/offer_line.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,15 +9,12 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
-import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/home/widgets/address_bar.dart';
 import 'package:druto/features/home/widgets/category_listview.dart';
-import 'package:druto/features/home/widgets/offer_slider.dart';
 import 'package:druto/features/home/widgets/popular_package_listview.dart';
 import 'package:druto/features/home/widgets/popular_products_listview.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
@@ -101,8 +100,27 @@ class HomePage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        ref.watch(getOffersProvider(h_id: 1)).when(
+                              data: (offerLines) => SizedBox(
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: offerLines.length,
+                                  itemBuilder: (context, index) {
+                                    final OfferLine offerLine =
+                                        offerLines[index];
+
+                                    return OfferCard(offerLine: offerLine);
+                                  },
+                                ),
+                              ),
+                              error: (error, stackTrace) =>
+                                  Text("Some Error Happened"),
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
                         const Text(
-                          "Categories",
+                          "What Are You ",
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),

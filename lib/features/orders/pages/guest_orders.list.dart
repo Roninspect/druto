@@ -67,143 +67,152 @@ class _GuestOrderListPageState extends ConsumerState<GuestOrderListPage> {
                     final order = orders[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        onTap: () {},
-                        tileColor: Colors.grey[100],
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        color: Colors.grey[200],
+                        child: Column(
                           children: [
-                            Text(
-                              "Order ID: #${order.id}",
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black),
-                            ),
-                            Text(
-                              "Total: ${order.total_amount}",
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                        subtitle: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              "Status:        ",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
-                            ),
-                            EasyStepper(
-                              activeStep: getStep(order.delivery_status!),
-                              activeStepTextColor: Colors.black87,
-                              finishedStepTextColor: Colors.black87,
-                              internalPadding: 0,
-                              showLoadingAnimation: false,
-                              stepRadius: 12,
-                              showStepBorder: false,
-                              steps: [
-                                EasyStep(
-                                  customStep: CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.white,
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor:
-                                          getStep(order.delivery_status!) >= 0
-                                              ? Colors.amber
-                                              : Colors.white,
-                                    ),
-                                  ),
-                                  customTitle: const Text(
-                                    'Pending',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Order ID: #${order.id}",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
-                                EasyStep(
-                                  customStep: CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.white,
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor:
-                                          getStep(order.delivery_status!) >= 1
-                                              ? Colors.blue
-                                              : Colors.white,
-                                    ),
-                                  ),
-                                  customTitle: const Text(
-                                    'Picking',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  topTitle: true,
+                                Text(
+                                  "Total: ${order.total_amount}",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
-                                EasyStep(
-                                  customStep: CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.white,
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor:
-                                          getStep(order.delivery_status!) >= 2
-                                              ? Colors.green
-                                              : Colors.white,
-                                    ),
-                                  ),
-                                  customTitle: const Text(
-                                    'Delivering',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600),
-                                  ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  "Status:        ",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                order.delivery_status ==
-                                        DeliveryStatus.Cancelled
-                                    ? EasyStep(
-                                        customStep: CircleAvatar(
-                                          radius: 12,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: getStep(order
-                                                        .delivery_status!) >=
-                                                    3
-                                                ? Colors.red
-                                                : Colors.white,
-                                          ),
+                                EasyStepper(
+                                  activeStep: getStep(order.delivery_status!),
+                                  activeStepTextColor: Colors.black87,
+                                  finishedStepTextColor: Colors.black87,
+                                  internalPadding: 0,
+                                  showLoadingAnimation: false,
+                                  stepRadius: 12,
+                                  showStepBorder: false,
+                                  steps: [
+                                    EasyStep(
+                                      customStep: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor:
+                                              getStep(order.delivery_status!) >=
+                                                      0
+                                                  ? Colors.amber
+                                                  : Colors.white,
                                         ),
-                                        customTitle: const Text(
-                                          'Cancelled',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        topTitle: true,
-                                      )
-                                    : EasyStep(
-                                        customStep: CircleAvatar(
-                                          radius: 12,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: getStep(order
-                                                        .delivery_status!) >=
-                                                    4
-                                                ? Colors.green
-                                                : Colors.white,
-                                          ),
-                                        ),
-                                        customTitle: const Text(
-                                          'Delivered',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        topTitle: true,
                                       ),
+                                      customTitle: const Text(
+                                        'Pending',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    EasyStep(
+                                      customStep: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor:
+                                              getStep(order.delivery_status!) >=
+                                                      1
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                        ),
+                                      ),
+                                      customTitle: const Text(
+                                        'Picking',
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      topTitle: true,
+                                    ),
+                                    EasyStep(
+                                      customStep: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor:
+                                              getStep(order.delivery_status!) >=
+                                                      2
+                                                  ? Colors.green
+                                                  : Colors.white,
+                                        ),
+                                      ),
+                                      customTitle: const Text(
+                                        'Delivering',
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    order.delivery_status ==
+                                            DeliveryStatus.Cancelled
+                                        ? EasyStep(
+                                            customStep: CircleAvatar(
+                                              radius: 12,
+                                              backgroundColor: Colors.white,
+                                              child: CircleAvatar(
+                                                radius: 10,
+                                                backgroundColor: getStep(order
+                                                            .delivery_status!) >=
+                                                        3
+                                                    ? Colors.red
+                                                    : Colors.white,
+                                              ),
+                                            ),
+                                            customTitle: const Text(
+                                              'Cancelled',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            topTitle: true,
+                                          )
+                                        : EasyStep(
+                                            customStep: CircleAvatar(
+                                              radius: 12,
+                                              backgroundColor: Colors.white,
+                                              child: CircleAvatar(
+                                                radius: 10,
+                                                backgroundColor: getStep(order
+                                                            .delivery_status!) >=
+                                                        4
+                                                    ? Colors.green
+                                                    : Colors.white,
+                                              ),
+                                            ),
+                                            customTitle: const Text(
+                                              'Delivered',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            topTitle: true,
+                                          ),
+                                  ],
+                                ),
                               ],
                             ),
                           ],

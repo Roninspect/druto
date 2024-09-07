@@ -7,7 +7,7 @@ part of 'products_repository.dart';
 // **************************************************************************
 
 String _$productsRepositoryHash() =>
-    r'1d59ae619c43f859c1b22d7f81678f6c91c2107b';
+    r'3db53faf3649e5c602172f928b667910eaf86cf2';
 
 /// See also [productsRepository].
 @ProviderFor(productsRepository)

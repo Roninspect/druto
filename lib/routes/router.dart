@@ -1,14 +1,13 @@
 import 'package:druto/features/checkout/pages/checkout_page.dart';
-import 'package:druto/features/home/pages/home_page.dart';
+import 'package:druto/features/offers/pages/offersPage.dart';
 import 'package:druto/features/orders/pages/guest_orders.list.dart';
 import 'package:druto/features/package/pages/bundle_details_page.dart';
 import 'package:druto/features/product_details.dart/pages/product_details.dart';
 import 'package:druto/features/products/pages/product_by_category_page.dart';
 import 'package:druto/features/root/pages/root_page.dart';
 import 'package:druto/features/search/pages/search_page.dart';
-import 'package:druto/models/category.dart';
 import 'package:druto/models/hub.dart';
-import 'package:druto/models/package.dart';
+import 'package:druto/models/offer_line.dart';
 import 'package:druto/models/package_line.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +22,7 @@ enum AppRoutes {
   category,
   guestOrder,
   search,
+  offers,
 }
 
 @riverpod
@@ -77,7 +77,15 @@ GoRouter router(RouterRef ref) {
             path: 'search',
             name: AppRoutes.search.name,
             builder: (context, state) => const SearchPage(),
-          )
+          ),
+          GoRoute(
+            path: 'offers/:path',
+            name: AppRoutes.offers.name,
+            builder: (context, state) => OffersPage(
+              offerLine: state.extra as OfferLine,
+              path: state.pathParameters["path"]!,
+            ),
+          ),
         ],
       ),
     ],

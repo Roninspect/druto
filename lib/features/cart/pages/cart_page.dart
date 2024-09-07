@@ -42,7 +42,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                     children: [
                       Icon(
                         MaterialCommunityIcons.cart_remove,
-                        size: context.height * 0.12,
+                        size: context.height * 0.08,
+                        color: Colors.grey,
                       ),
                       SizedBox(
                         height: context.height * 0.02,
@@ -50,7 +51,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       const Text(
                         "Your Shopping Cart is Empty",
                         style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 22),
+                            fontWeight: FontWeight.w500, fontSize: 18),
                       )
                     ],
                   ),

@@ -13,7 +13,7 @@ OrderRepository orderRepository(OrderRepositoryRef ref) {
 @riverpod
 Future<List<UserOrder>> getGuestOrders(GetGuestOrdersRef ref,
     {required String phone}) async {
-  final timer = Timer(const Duration(minutes: 1), () {
+  final timer = Timer(const Duration(seconds: 10), () {
     ref.invalidateSelf();
   });
 

@@ -46,7 +46,9 @@ class _ProductCartItemState extends ConsumerState<ProductCartItem> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? CircularProgressIndicator()
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
         : AsyncValueWidget(
             value:
                 ref.watch(getProductLineByIdProvider(plId: widget.cart.pl_id!)),
