@@ -1,7 +1,4 @@
-import 'package:druto/features/offers/repository/offer_repository.dart';
-import 'package:druto/features/offers/widgets/OfferCard.dart';
-import 'package:druto/models/Offer.dart';
-import 'package:druto/models/offer_line.dart';
+import 'package:druto/features/home/widgets/offer_slider.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,30 +97,14 @@ class HomePage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ref.watch(getOffersProvider(h_id: 1)).when(
-                              data: (offerLines) => SizedBox(
-                                height: 200,
-                                child: ListView.builder(
-                                  itemCount: offerLines.length,
-                                  itemBuilder: (context, index) {
-                                    final OfferLine offerLine =
-                                        offerLines[index];
-
-                                    return OfferCard(offerLine: offerLine);
-                                  },
-                                ),
-                              ),
-                              error: (error, stackTrace) =>
-                                  Text("Some Error Happened"),
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
+                        const OfferSlider(),
+                        SizedBox(height: context.height * 0.01),
                         const Text(
-                          "What Are You ",
+                          "Shop by category",
                           style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(height: context.height * 0.01),
                         const CategoryListView(),
                         SizedBox(height: context.height * 0.02),
                         // Category List Builder

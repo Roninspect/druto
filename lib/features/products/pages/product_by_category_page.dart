@@ -1,6 +1,5 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
-import 'package:druto/features/home/pages/home_page.dart';
 import 'package:druto/features/products/providers/is_last_page.dart';
 import 'package:druto/features/products/providers/page_provider.dart';
 import 'package:druto/features/products/providers/product_list.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/features/home/widgets/product_card.dart';
-import 'package:druto/features/products/repository/products_repository.dart';
 import 'package:druto/models/hub.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:go_router/go_router.dart';

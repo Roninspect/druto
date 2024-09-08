@@ -1,4 +1,3 @@
-import 'package:druto/models/Offer.dart';
 import 'package:druto/models/offer_item.dart';
 import 'package:druto/models/offer_line.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -49,7 +48,7 @@ class OfferRepository {
       {required int ofl_id, required String path}) async {
     try {
       final res = await client
-          .from("offer_items")
+         .from("offer_items")
           .select("*, product_line(*, products(*)), offers(*)")
           .eq("ofl_id", ofl_id)
           .eq('offers.path', path);
@@ -61,5 +60,5 @@ class OfferRepository {
     } catch (e) {
       rethrow;
     }
-  }
+  } 
 }

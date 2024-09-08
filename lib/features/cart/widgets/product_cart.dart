@@ -6,7 +6,6 @@ import 'package:druto/features/cart/controllers/cart_controller.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/products/controllers/products_controller.dart';
-import 'package:druto/features/products/repository/products_repository.dart';
 import 'package:druto/models/cart.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';

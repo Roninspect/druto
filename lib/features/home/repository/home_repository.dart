@@ -3,7 +3,6 @@ import 'package:druto/models/category.dart';
 import 'package:druto/models/hub.dart';
 import 'package:druto/models/package_item.dart';
 import 'package:druto/models/package_line.dart';
-import 'package:druto/models/product.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

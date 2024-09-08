@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:druto/core/helpers/failure.dart';
 import 'package:druto/core/helpers/typedefs.dart';
-import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';

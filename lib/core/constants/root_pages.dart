@@ -1,10 +1,7 @@
 import 'package:druto/features/cart/pages/cart_page.dart';
 import 'package:druto/features/home/pages/home_page.dart';
-import 'package:druto/features/orders/pages/guest_user_page.dart';
 import 'package:druto/features/orders/pages/order_page.dart';
-import 'package:druto/features/orders/pages/user_orders_page.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Constants {
   static List<Widget> rootPages = [

@@ -1,8 +1,6 @@
-import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserOrderPage extends ConsumerWidget {
   const UserOrderPage({super.key});

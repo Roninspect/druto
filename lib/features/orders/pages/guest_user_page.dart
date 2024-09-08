@@ -1,11 +1,8 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
-import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/core/theme/theme.dart';
-import 'package:druto/features/orders/repository/order_repository.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
