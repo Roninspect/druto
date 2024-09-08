@@ -78,7 +78,6 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                 height: context.height * 0.1,
                 fit: BoxFit.contain,
               ),
-              SizedBox(height: context.height * 0.01),
               SizedBox(
                 width: context.width * 0.4,
                 child: Text(
@@ -136,14 +135,6 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                         setState(() {
                           isLoading = true;
                         });
-
-                        print("ATC: ${Cart(
-                          id: widget.packageLine.id,
-                          pckgl_id: widget.packageLine.id,
-                          pckg_id: widget.packageLine.pckg_id,
-                          quantity: 1,
-                        )}");
-
                         await ref
                             .read(cartControllerProvider.notifier)
                             .addToCart(

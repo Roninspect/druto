@@ -38,7 +38,9 @@ class _ProductImageCarouselState extends ConsumerState<OfferSlider> {
               ),
             ],
           ),
-          error: (error, stackTrace) => const Text("Some Error Happened"),
+          error: (error, stackTrace) => const Center(
+            child: Text("Some Error Happened"),
+          ),
           loading: () => const Center(
             child: CircularProgressIndicator(),
           ),

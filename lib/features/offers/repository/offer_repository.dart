@@ -33,7 +33,8 @@ class OfferRepository {
       final res = await client
           .from("offer_lines")
           .select("*, offers(*)")
-          .eq("h_id", h_id);
+          .eq("h_id", h_id)
+          .eq("is_active", true);
 
       final List<OfferLine> offers =
           res.map((e) => OfferLine.fromMap(e)).toList();
@@ -48,10 +49,14 @@ class OfferRepository {
       {required int ofl_id, required String path}) async {
     try {
       final res = await client
-         .from("offer_items")
+          .from("offer_items")
           .select("*, product_line(*, products(*)), offers(*)")
           .eq("ofl_id", ofl_id)
+          .eq('product_line.is_active', true)
+          .not('product_line', 'is', null)
           .eq('offers.path', path);
+
+      print(res);
 
       final List<OfferItem> items =
           res.map((e) => OfferItem.fromMap(e)).toList();
@@ -60,5 +65,5 @@ class OfferRepository {
     } catch (e) {
       rethrow;
     }
-  } 
+  }
 }

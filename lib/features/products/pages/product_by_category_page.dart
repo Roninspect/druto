@@ -52,7 +52,7 @@ class _ProductsListByCategoryState
   }
 
   @override
-  Widget build(BuildContext context) {            
+  Widget build(BuildContext context) {
     final isLoading = ref.watch(productByCategoryProvider).isLoading;
     final error = ref.watch(productByCategoryProvider).error;
     final data = ref.watch(productByCategoryProvider).valueOrNull;
