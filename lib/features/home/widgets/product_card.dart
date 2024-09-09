@@ -58,7 +58,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                   child: Text(
                     widget.productLine.products!.name,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                     style: TextStyle(
                         fontSize: context.f15,
                         fontWeight: FontWeight.w600,

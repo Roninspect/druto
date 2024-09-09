@@ -60,6 +60,7 @@ class ProductsRepository {
           .select("*, products!inner(*)")
           .eq('c_id', hub.cId)
           .eq('h_id', hub.id!)
+          .eq("is_active", true)
           .eq('products.category', categoryId!)
           .order('bought', ascending: false)
           .range(range.start, range.end)

@@ -85,9 +85,12 @@ class CategoryListView extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                         ),
-                        child: Image.network(
-                          category.pic!,
-                          fit: BoxFit.fill,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            category.pic!,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
@@ -102,8 +105,7 @@ class CategoryListView extends ConsumerWidget {
                   ],
                 );
               } else {
-                // Return an empty container for remaining grid slots
-                return Container();
+                return const SizedBox();
               }
             },
           );

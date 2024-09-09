@@ -102,9 +102,9 @@ class _ProductsListByCategoryState
                                           ? const NeverScrollableScrollPhysics()
                                           : const AlwaysScrollableScrollPhysics(),
                                       gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                          SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
-                                        mainAxisExtent: 238,
+                                        mainAxisExtent: context.height * 0.31,
                                       ),
                                       itemBuilder: (context, index) {
                                         final ProductLine productLine =

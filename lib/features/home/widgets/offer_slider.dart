@@ -25,6 +25,7 @@ class _ProductImageCarouselState extends ConsumerState<OfferSlider> {
                 child: CarouselView(
                   itemExtent: 350,
                   shrinkExtent: 350,
+                  itemSnapping: true,
                   padding: const EdgeInsets.all(10.0),
                   onTap: (value) => context.pushNamed(AppRoutes.offers.name,
                       pathParameters: {"path": offerLines[value].offers.path},

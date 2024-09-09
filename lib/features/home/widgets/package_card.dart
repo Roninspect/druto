@@ -103,8 +103,13 @@ class _BundleCardState extends ConsumerState<PackageCard> {
                                   element.item_quantity) -
                       widget.packageLine.discount;
 
-                  final mainsum = packageItems.fold<double>(0,
-                      (value, element) => value + element.product_line!.price);
+                  final mainsum = packageItems.fold<double>(
+                      0,
+                      (value, element) =>
+                          value +
+                          (element.product_line!.price -
+                                  element.product_line!.discountedPrice) *
+                              element.item_quantity);
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

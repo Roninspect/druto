@@ -42,13 +42,8 @@ class ProductByCategory extends _$ProductByCategory {
     state = await AsyncValue.guard(() async {
       final previous = state.value;
 
-      final List<ProductLine> next = await Future.delayed(
-        const Duration(seconds: 3),
-        () {
-          return repository.getProductByCategory(
-            ref: ref,
-          );
-        },
+      final List<ProductLine> next = await repository.getProductByCategory(
+        ref: ref,
       );
 
       if (next.length < 10) {

@@ -6,7 +6,7 @@ part of 'offer_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$offerRepositoryHash() => r'4cb07468b1312f5263da5b9b0b546a05e236d23e';
+String _$offerRepositoryHash() => r'41a6da18bbd19cba1288a7b3b8ba644e64327fd6';
 
 /// See also [offerRepository].
 @ProviderFor(offerRepository)
