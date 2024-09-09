@@ -59,6 +59,11 @@ class _ProductsListByCategoryState
     final postLoading = ref.watch(isLastPageProvider);
 
     return SafeArea(
+        child: PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        ref.invalidate(selectedPageNoNotifierProvider);
+        ref.invalidate(isLastPageProvider);
+      },
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -150,6 +155,6 @@ class _ProductsListByCategoryState
           ),
         ),
       ),
-    );
+    ));
   }
 }

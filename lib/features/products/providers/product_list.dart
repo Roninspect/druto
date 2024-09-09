@@ -52,8 +52,6 @@ class ProductByCategory extends _$ProductByCategory {
 
       final updatedList = [...previous!, ...next];
 
-      print(updatedList.length);
-
       return updatedList;
     });
 

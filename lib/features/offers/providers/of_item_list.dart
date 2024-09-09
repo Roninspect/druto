@@ -46,20 +46,14 @@ class OfferItemsList extends _$OfferItemsList {
     state = await AsyncValue.guard(() async {
       final previous = state.value;
 
-      final List<OfferItem> next = await Future.delayed(
-        const Duration(seconds: 3),
-        () {
-          return repository.getOfferItems(ofl_id: ofl_id, path: path);
-        },
-      );
+      final List<OfferItem> next =
+          await repository.getOfferItems(ofl_id: ofl_id, path: path);
 
       if (next.length < 10) {
         ref.read(ofIsLastPageProvider.notifier).setLastPageTrue();
       }
 
       final updatedList = [...previous!, ...next];
-
-
 
       return updatedList;
     });
