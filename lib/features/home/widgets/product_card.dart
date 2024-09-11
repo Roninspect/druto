@@ -54,6 +54,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                 ),
                 SizedBox(height: context.height * 0.005),
                 SizedBox(
+                  height: context.height * 0.05,
                   width: context.midOverflow * 0.8,
                   child: Text(
                     widget.productLine.products!.name,

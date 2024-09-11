@@ -5,12 +5,14 @@ class Offer {
   final int id;
   final String name;
   final String banner;
-  final String path;
+  final String? path;
+  final bool hasItems;
   Offer({
     required this.id,
     required this.name,
     required this.banner,
-    required this.path,
+    this.path,
+    required this.hasItems,
   });
 
   Offer copyWith({
@@ -18,12 +20,14 @@ class Offer {
     String? name,
     String? banner,
     String? path,
+    bool? hasItems,
   }) {
     return Offer(
       id: id ?? this.id,
       name: name ?? this.name,
       banner: banner ?? this.banner,
       path: path ?? this.path,
+      hasItems: hasItems ?? this.hasItems,
     );
   }
 
@@ -33,6 +37,7 @@ class Offer {
       'name': name,
       'banner': banner,
       'path': path,
+      'hasItems': hasItems,
     };
   }
 
@@ -41,7 +46,8 @@ class Offer {
       id: map['id'] as int,
       name: map['name'] as String,
       banner: map['banner'] as String,
-      path: map['path'] as String,
+      path: map['path'] != null ? map['path'] as String : null,
+      hasItems: map['hasItems'] as bool,
     );
   }
 
@@ -52,7 +58,7 @@ class Offer {
 
   @override
   String toString() {
-    return 'Offer(id: $id, name: $name, banner: $banner, path: $path)';
+    return 'Offer(id: $id, name: $name, banner: $banner, path: $path, hasItems: $hasItems)';
   }
 
   @override
@@ -62,11 +68,16 @@ class Offer {
     return other.id == id &&
         other.name == name &&
         other.banner == banner &&
-        other.path == path;
+        other.path == path &&
+        other.hasItems == hasItems;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ banner.hashCode ^ path.hashCode;
+    return id.hashCode ^
+        name.hashCode ^
+        banner.hashCode ^
+        path.hashCode ^
+        hasItems.hashCode;
   }
 }

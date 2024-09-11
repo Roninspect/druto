@@ -34,6 +34,7 @@ class OfferLine {
       'id': id,
       'of_id': of_id,
       'h_id': h_id,
+      'offers': offers.toMap(),
     };
   }
 

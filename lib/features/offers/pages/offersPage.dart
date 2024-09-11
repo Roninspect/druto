@@ -6,12 +6,9 @@ import 'package:druto/features/home/widgets/product_card.dart';
 import 'package:druto/features/offers/providers/of_is_lasr_page.dart';
 import 'package:druto/features/offers/providers/of_item_list.dart';
 import 'package:druto/features/offers/providers/of_page_provider.dart';
-import 'package:druto/models/offer_item.dart';
 import 'package:druto/models/product_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:druto/features/offers/repository/offer_repository.dart';
 import 'package:druto/models/offer_line.dart';
 
 class OffersPage extends ConsumerStatefulWidget {

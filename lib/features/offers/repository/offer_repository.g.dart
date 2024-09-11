@@ -169,6 +169,134 @@ class _GetOffersProviderElement extends FutureProviderElement<List<OfferLine>>
   int get h_id => (origin as GetOffersProvider).h_id;
 }
 
+String _$getlistBannersHash() => r'd7a64fa44e3bc32372195d337a4959f7195d2c8c';
+
+/// See also [getlistBanners].
+@ProviderFor(getlistBanners)
+const getlistBannersProvider = GetlistBannersFamily();
+
+/// See also [getlistBanners].
+class GetlistBannersFamily extends Family<AsyncValue<List<OfferLine>>> {
+  /// See also [getlistBanners].
+  const GetlistBannersFamily();
+
+  /// See also [getlistBanners].
+  GetlistBannersProvider call({
+    required int h_id,
+  }) {
+    return GetlistBannersProvider(
+      h_id: h_id,
+    );
+  }
+
+  @override
+  GetlistBannersProvider getProviderOverride(
+    covariant GetlistBannersProvider provider,
+  ) {
+    return call(
+      h_id: provider.h_id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getlistBannersProvider';
+}
+
+/// See also [getlistBanners].
+class GetlistBannersProvider extends FutureProvider<List<OfferLine>> {
+  /// See also [getlistBanners].
+  GetlistBannersProvider({
+    required int h_id,
+  }) : this._internal(
+          (ref) => getlistBanners(
+            ref as GetlistBannersRef,
+            h_id: h_id,
+          ),
+          from: getlistBannersProvider,
+          name: r'getlistBannersProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getlistBannersHash,
+          dependencies: GetlistBannersFamily._dependencies,
+          allTransitiveDependencies:
+              GetlistBannersFamily._allTransitiveDependencies,
+          h_id: h_id,
+        );
+
+  GetlistBannersProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.h_id,
+  }) : super.internal();
+
+  final int h_id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<OfferLine>> Function(GetlistBannersRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetlistBannersProvider._internal(
+        (ref) => create(ref as GetlistBannersRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        h_id: h_id,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<List<OfferLine>> createElement() {
+    return _GetlistBannersProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetlistBannersProvider && other.h_id == h_id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, h_id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetlistBannersRef on FutureProviderRef<List<OfferLine>> {
+  /// The parameter `h_id` of this provider.
+  int get h_id;
+}
+
+class _GetlistBannersProviderElement
+    extends FutureProviderElement<List<OfferLine>> with GetlistBannersRef {
+  _GetlistBannersProviderElement(super.provider);
+
+  @override
+  int get h_id => (origin as GetlistBannersProvider).h_id;
+}
+
 String _$getOfferItemsHash() => r'9c6765cc3558d86a7974b915ff1076685c0fb010';
 
 /// See also [getOfferItems].

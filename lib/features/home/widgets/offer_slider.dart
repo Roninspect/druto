@@ -23,13 +23,17 @@ class _ProductImageCarouselState extends ConsumerState<OfferSlider> {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 200),
                 child: CarouselView(
-                  itemExtent: 350,
+                  itemExtent: 370,
                   shrinkExtent: 350,
                   itemSnapping: true,
                   padding: const EdgeInsets.all(10.0),
-                  onTap: (value) => context.pushNamed(AppRoutes.offers.name,
-                      pathParameters: {"path": offerLines[value].offers.path},
-                      extra: offerLines[value]),
+                  onTap: (value) => offerLines[value].offers.hasItems
+                      ? context.pushNamed(AppRoutes.offers.name,
+                          pathParameters: {
+                            "path": offerLines[value].offers.path!
+                          },
+                          extra: offerLines[value])
+                      : () {},
                   children: offerLines
                       .map(
                         (offerLine) => OfferCard(offerLine: offerLine),

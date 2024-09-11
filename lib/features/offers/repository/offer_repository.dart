@@ -18,6 +18,12 @@ Future<List<OfferLine>> getOffers(GetOffersRef ref, {required int h_id}) async {
 }
 
 @Riverpod(keepAlive: true)
+Future<List<OfferLine>> getlistBanners(GetlistBannersRef ref,
+    {required int h_id}) async {
+  return ref.watch(offerRepositoryProvider).getlistBanners(h_id: h_id);
+}
+
+@Riverpod(keepAlive: true)
 Future<List<OfferItem>> getOfferItems(GetOfferItemsRef ref,
     {required int ofl_id, required String path}) async {
   return ref
@@ -34,9 +40,30 @@ class OfferRepository {
     try {
       final res = await client
           .from("offer_lines")
-          .select("*, offers(*)")
+          .select("*, offers!inner(*)")
           .eq("h_id", h_id)
-          .eq("is_active", true);
+          .eq("is_active", true)
+          .eq("offers.for_list", false)
+          .order("priority", ascending: true);
+
+      final List<OfferLine> offers =
+          res.map((e) => OfferLine.fromMap(e)).toList();
+
+      return offers;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<OfferLine>> getlistBanners({required int h_id}) async {
+    try {
+      final res = await client
+          .from("offer_lines")
+          .select("*, offers!inner(*)")
+          .eq("h_id", h_id)
+          .eq("is_active", true)
+          .eq("offers.for_list", true)
+          .order("list_priority", ascending: true);
 
       final List<OfferLine> offers =
           res.map((e) => OfferLine.fromMap(e)).toList();

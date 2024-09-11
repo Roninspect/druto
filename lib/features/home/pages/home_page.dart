@@ -1,3 +1,4 @@
+import 'package:druto/features/home/widgets/list_banner.dart';
 import 'package:druto/features/home/widgets/offer_slider.dart';
 import 'package:druto/routes/router.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,6 @@ class HomePage extends ConsumerWidget {
     }
 
     final position = ref.watch(getPositionProvider).valueOrNull;
-
     return AsyncValueWidget(
       value: ref.watch(getHubsProvider),
       data: (p0) {
@@ -107,10 +107,15 @@ class HomePage extends ConsumerWidget {
                         SizedBox(height: context.height * 0.01),
                         const CategoryListView(),
                         SizedBox(height: context.height * 0.02),
-                        // Category List Builder
-
                         const PopularPackageListview(),
-                        const PopularProductsListview()
+                        const PopularProductsListview(),
+                        const ListBanner(position: 1),
+                        const PopularProductsListview(),
+                        const PopularProductsListview(),
+                        const ListBanner(position: 2),
+                        const PopularProductsListview(),
+                        const PopularProductsListview(),
+                        const ListBanner(position: 3),
                       ],
                     ),
                   ),
