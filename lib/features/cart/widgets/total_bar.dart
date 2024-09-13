@@ -1,6 +1,5 @@
 import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
-import 'package:druto/core/helpers/custom_snackbar.dart';
 import 'package:druto/features/config/config_provider.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
 import 'package:druto/features/root/provider/location_provider.dart';
@@ -9,7 +8,6 @@ import 'package:druto/models/hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TotalBar extends ConsumerWidget {
   final List<Cart> carts;
@@ -122,57 +120,57 @@ class TotalBar extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Add Coupon",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: context.height * 0.01),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                      width: context.width * 0.62,
-                      height: context.height * 0.068,
-                      child: const TextField(
-                        decoration: InputDecoration(
-                          hintText: "Add Voucher Code",
-                          border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 0.2),
-                          ),
-                        ),
-                      )),
-                  SizedBox(width: context.width * 0.03),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Supabase.instance.client.auth.currentUser != null
-                                ? Colors.green
-                                : Colors.grey,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize:
-                            Size(context.width * 0.3, context.height * 0.055)),
-                    onPressed: () {
-                      if (Supabase.instance.client.auth.currentUser == null) {
-                        showSnackbar(
-                            context: context,
-                            leadingIcon: Icons.warning_amber,
-                            backgroundColor: Colors.red,
-                            text: "Please Sign In to Use Coupons",
-                            subtitle: "Click here to Sign In");
-                      }
-                    },
-                    child: const Text(
-                      "Apply",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 8.0),
+              //   child: Text(
+              //     "Add Coupon",
+              //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+              // SizedBox(height: context.height * 0.01),
+              // Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     SizedBox(
+              //         width: context.width * 0.62,
+              //         height: context.height * 0.068,
+              //         child: const TextField(
+              //           decoration: InputDecoration(
+              //             hintText: "Add Voucher Code",
+              //             border: OutlineInputBorder(),
+              //             enabledBorder: OutlineInputBorder(
+              //               borderSide: BorderSide(width: 0.2),
+              //             ),
+              //           ),
+              //         )),
+              //     SizedBox(width: context.width * 0.03),
+              //     ElevatedButton(
+              //       style: ElevatedButton.styleFrom(
+              //           backgroundColor:
+              //               Supabase.instance.client.auth.currentUser != null
+              //                   ? Colors.green
+              //                   : Colors.grey,
+              //           shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(10)),
+              //           fixedSize:
+              //               Size(context.width * 0.3, context.height * 0.055)),
+              //       onPressed: () {
+              //         if (Supabase.instance.client.auth.currentUser == null) {
+              //           showSnackbar(
+              //               context: context,
+              //               leadingIcon: Icons.warning_amber,
+              //               backgroundColor: Colors.red,
+              //               text: "Please Sign In to Use Coupons",
+              //               subtitle: "Click here to Sign In");
+              //         }
+              //       },
+              //       child: const Text(
+              //         "Apply",
+              //         style: TextStyle(fontSize: 18, color: Colors.white),
+              //       ),
+              //     )
+              //   ],
+              // ),
               SizedBox(height: context.height * 0.01),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

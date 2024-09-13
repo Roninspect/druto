@@ -57,7 +57,8 @@ class ProductDetailsPage extends ConsumerWidget {
                           Image.network(
                             product.pic,
                             width: context.width * 0.95,
-                            height: context.height * 0.3,
+                            height: context.height * 0.35,
+                            fit: BoxFit.fill,
                           ),
                           IconButton(
                             onPressed: () {
@@ -89,13 +90,15 @@ class ProductDetailsPage extends ConsumerWidget {
                     style: const TextStyle(
                         fontSize: 35, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: context.height * 0.01),
+                  SizedBox(height: context.height * 0.002),
                   Text(
-                    "Weight: ${product.weight}",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w600),
+                    "Unit: ${product.weight}",
+                    style: TextStyle(
+                        fontSize: context.f18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[500]),
                   ),
-                  SizedBox(height: context.height * 0.01),
+                  SizedBox(height: context.height * 0.002),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -103,8 +106,8 @@ class ProductDetailsPage extends ConsumerWidget {
                         children: [
                           Text(
                             "৳${productLine.price}",
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: context.f20,
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.lineThrough,
                               decorationStyle: TextDecorationStyle.solid,
@@ -115,9 +118,9 @@ class ProductDetailsPage extends ConsumerWidget {
                             width: context.width * 0.02,
                           ),
                           Text(
-                            "৳${productLine.discountedPrice}",
-                            style: const TextStyle(
-                                fontSize: 35,
+                            "৳${productLine.price - productLine.discountedPrice}",
+                            style: TextStyle(
+                                fontSize: context.f35,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor),
                           ),
@@ -201,8 +204,8 @@ class ProductDetailsPage extends ConsumerWidget {
                                       ),
                                       Text(
                                         "${cart.quantity}",
-                                        style: const TextStyle(
-                                            fontSize: 20,
+                                        style: TextStyle(
+                                            fontSize: context.f20,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       ),
@@ -294,7 +297,7 @@ class ProductDetailsPage extends ConsumerWidget {
                         fontSize: context.f16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                    product.details,
                     style: TextStyle(fontSize: context.f15),
                   ),
                   SizedBox(

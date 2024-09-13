@@ -70,7 +70,7 @@ class PopularProductsListview extends ConsumerWidget {
               ref.watch(getProductsByHubProvider(cid: hub.cId, hid: hub.id!)),
           data: (productLines) {
             return SizedBox(
-              height: context.height * 0.29,
+              height: context.height * 0.3,
               child: ListView.builder(
                 itemCount: productLines.length,
                 scrollDirection: Axis.horizontal,

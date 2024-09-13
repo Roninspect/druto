@@ -37,7 +37,6 @@ class _CartPageState extends ConsumerState<CartPage> {
           return carts.isEmpty
               ? Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         MaterialCommunityIcons.cart_remove,
@@ -65,7 +64,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: context.height * 0.42,
+                              height: context.height * 0.53,
                               child: ListView.separated(
                                 itemCount: carts.length,
                                 separatorBuilder: (context, index) =>

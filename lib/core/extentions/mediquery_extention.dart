@@ -17,8 +17,11 @@ extension MediaQueryValues on BuildContext {
   //font sizes
   double get f13 => width * 0.030;
   double get f15 => width * 0.040;
-  double get f16 => width * 0.050;
+  double get f16 => width * 0.045;
+  double get f17 => width * 0.050;
   double get f20 => width * 0.052;
+  double get f18 => width * 0.042;
+  double get f35 => width * 0.08;
 
   //icon sizes
   double get ism => width * 0.04;

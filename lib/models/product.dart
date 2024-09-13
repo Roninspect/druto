@@ -7,12 +7,14 @@ class Product {
   final String pic;
   final int category;
   final String weight;
+  final String details;
   Product({
     this.id,
     required this.name,
     required this.pic,
     required this.category,
     required this.weight,
+    required this.details,
   });
 
   Product copyWith({
@@ -21,6 +23,7 @@ class Product {
     String? pic,
     int? category,
     String? weight,
+    String? details,
   }) {
     return Product(
       id: id ?? this.id,
@@ -28,15 +31,18 @@ class Product {
       pic: pic ?? this.pic,
       category: category ?? this.category,
       weight: weight ?? this.weight,
+      details: details ?? this.details,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'name': name,
       'pic': pic,
       'category': category,
       'weight': weight,
+      'details': details,
     };
   }
 
@@ -47,6 +53,7 @@ class Product {
       pic: map['pic'] as String,
       category: map['category'] as int,
       weight: map['weight'] as String,
+      details: map['details'] as String,
     );
   }
 
@@ -57,7 +64,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, pic: $pic, category: $category, weight: $weight)';
+    return 'Product(id: $id, name: $name, pic: $pic, category: $category, weight: $weight, details: $details)';
   }
 
   @override
@@ -68,7 +75,8 @@ class Product {
         other.name == name &&
         other.pic == pic &&
         other.category == category &&
-        other.weight == weight;
+        other.weight == weight &&
+        other.details == details;
   }
 
   @override
@@ -77,6 +85,7 @@ class Product {
         name.hashCode ^
         pic.hashCode ^
         category.hashCode ^
-        weight.hashCode;
+        weight.hashCode ^
+        details.hashCode;
   }
 }

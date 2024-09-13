@@ -126,8 +126,9 @@ class _ProductsListByCategoryState
                                                     isInCartProvider(
                                                         productLine.id!)),
                                                 data: (p0) => Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(7.0),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 7.0),
                                                   child: ProductCard(
                                                     productLine: productLine,
                                                     isInCart: p0 == null

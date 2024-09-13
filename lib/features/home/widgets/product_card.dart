@@ -34,44 +34,52 @@ class _ProductCardState extends ConsumerState<ProductCard> {
         ? widget.productLine.price
         : (widget.productLine.price - widget.productLine.discountedPrice);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
       decoration: BoxDecoration(
           border: Border.all(width: 0.1),
           borderRadius: BorderRadius.circular(10)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () => context.pushNamed(AppRoutes.product.name,
                 extra: widget.productLine),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(
-                  widget.productLine.products!.pic,
-                  height: context.height * 0.08,
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(height: context.height * 0.005),
-                SizedBox(
-                  height: context.height * 0.05,
-                  width: context.midOverflow * 0.8,
-                  child: Text(
-                    widget.productLine.products!.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontSize: context.f15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
+                Center(
+                  child: Image.network(
+                    widget.productLine.products!.pic,
+                    height: context.height * 0.1,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                Text(
-                  widget.productLine.products!.weight,
-                  style: TextStyle(
-                      fontSize: context.f15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54),
+                SizedBox(height: context.height * 0.01),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: context.height * 0.05,
+                      width: context.midOverflow * 0.8,
+                      child: Text(
+                        widget.productLine.products!.name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontSize: context.f15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(height: context.height * 0.005),
+                    Text(
+                      widget.productLine.products!.weight,
+                      style: TextStyle(
+                          fontSize: context.f13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54),
+                    ),
+                  ],
                 ),
                 SizedBox(height: context.height * 0.005),
                 Row(
@@ -80,7 +88,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                       "৳$finalSum",
                       style: TextStyle(
                           fontSize: context.f16,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
                     SizedBox(width: context.width * 0.01),
@@ -88,50 +96,15 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                         ? const SizedBox.shrink()
                         : Text(
                             "৳${widget.productLine.price}",
-                            style: const TextStyle(
+                            style: TextStyle(
                                 decoration: TextDecoration.lineThrough,
+                                fontSize: context.f15,
                                 decorationStyle: TextDecorationStyle.solid,
                                 color: Colors.grey),
                           ),
                     SizedBox(
                       width: context.width * 0.05,
                     ),
-                    // widget.isInCart
-                    //     ? const SizedBox.shrink()
-                    //     : InkWell(
-                    //         onTap: () async {
-                    //           setState(() {
-                    //             isLoading = true;
-                    //           });
-
-                    //           await ref
-                    //               .read(cartControllerProvider.notifier)
-                    //               .addToCart(
-                    //                 Cart(
-                    //                   id: widget.productLine.id,
-                    //                   p_id: widget.productLine.pId,
-                    //                   pl_id: widget.productLine.id!,
-                    //                   quantity: 1,
-                    //                 ),
-                    //               );
-
-                    //           ref.invalidate(
-                    //               isInCartProvider(widget.productLine.id!));
-
-                    //           setState(() {
-                    //             isLoading = false;
-                    //           });
-                    //         },
-                    //         child: CircleAvatar(
-                    //           radius: 20,
-                    //           backgroundColor: primaryColor,
-                    //           child: Icon(
-                    //             Icons.add,
-                    //             color: Colors.white,
-                    //             size: context.height * 0.03,
-                    //           ),
-                    //         ),
-                    //       )
                   ],
                 ),
               ],
@@ -160,7 +133,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                     });
                   },
                   child: Container(
-                    width: context.width * 0.4,
+                    width: context.width * 0.40,
                     height: context.height * 0.04,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.green, width: 2),
@@ -177,7 +150,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                   ),
                 )
               : Container(
-                  width: context.width * 0.4,
+                  width: context.width * 0.40,
                   height: context.height * 0.04,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.green, width: 2),

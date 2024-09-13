@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,12 +36,18 @@ class ListBanner extends ConsumerWidget {
                         },
                         extra: banners[position - 1])
                     : () {},
-                child: SizedBox(
-                  height: 200,
-                  width: 600,
-                  child: Image.network(
-                    banners[position - 1].offers.banner,
-                    fit: BoxFit.cover,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    height: 190,
+                    width: context.width * 0.95,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        banners[position - 1].offers.banner,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
                 ),
               );
