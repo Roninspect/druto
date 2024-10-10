@@ -47,7 +47,7 @@ class _PackageCartItemState extends ConsumerState<PackageCartItem> {
 
   @override
   Widget build(BuildContext context) {
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
     final hubs = ref.watch(getHubsProvider).value;
 
     final hub = isLocationWithinAnyHub(

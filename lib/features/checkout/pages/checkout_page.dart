@@ -63,12 +63,11 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(checkoutControllerProvider);
-    final currentPosition = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     final hub = isLocationWithinAnyHub(
         hubs: ref.watch(getHubsProvider).value!,
-        location:
-            LatLng(currentPosition!.latitude, currentPosition.longitude))[0];
+        location: LatLng(position!.latitude, position.longitude))[0];
     num getTotalItemPrice({required List<Cart> carts, required int hubId}) {
       num sum = 0;
       for (var cart in carts) {
@@ -133,8 +132,8 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       ),
       body: SingleChildScrollView(
           child: AsyncValueWidget(
-        value: ref.watch(getpositionNameProvider(DoubleArg(
-            lat: currentPosition.latitude, lng: currentPosition.longitude))),
+        value: ref.watch(getpositionNameProvider(
+            DoubleArg(lat: position.latitude, lng: position.longitude))),
         data: (p0) => AsyncValueWidget(
             value: Supabase.instance.client.auth.currentUser != null
                 ? ref.watch(getlocalCartItemsProvider)

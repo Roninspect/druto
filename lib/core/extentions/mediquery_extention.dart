@@ -24,7 +24,7 @@ extension MediaQueryValues on BuildContext {
   double get f35 => width * 0.08;
 
   //icon sizes
-  double get ism => width * 0.04;
+  double get ism => width * 0.06;
 
   // text oversflow limit width sizes
   double get midOverflow => width * 0.45;

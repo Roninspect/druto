@@ -58,6 +58,8 @@ class _ProductsListByCategoryState
     final data = ref.watch(productByCategoryProvider).valueOrNull;
     final postLoading = ref.watch(isLastPageProvider);
 
+    print(error);
+
     return SafeArea(
         child: PopScope(
       onPopInvokedWithResult: (didPop, result) {

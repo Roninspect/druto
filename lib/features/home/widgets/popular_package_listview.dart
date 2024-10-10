@@ -18,8 +18,7 @@ class PopularPackageListview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hubs = ref.watch(getHubsProvider).valueOrNull;
-
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     List<Hub> isLocationWithinAnyHub(
         {required List<Hub> hubs, required LatLng location}) {

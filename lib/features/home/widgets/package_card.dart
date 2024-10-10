@@ -37,7 +37,7 @@ class _BundleCardState extends ConsumerState<PackageCard> {
   Widget build(BuildContext context) {
     final hubs = ref.watch(getHubsProvider).valueOrNull;
 
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     List<Hub> isLocationWithinAnyHub(
         {required List<Hub> hubs, required LatLng location}) {

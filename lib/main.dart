@@ -37,6 +37,9 @@ class MyApp extends ConsumerWidget {
         child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.green[500],
+        ),
         progressIndicatorTheme:
             const ProgressIndicatorThemeData(color: Colors.green),
         appBarTheme: const AppBarTheme(

@@ -1,3 +1,4 @@
+import 'package:druto/core/extentions/mediquery_extention.dart';
 import 'package:druto/core/helpers/async_value_helper.dart';
 import 'package:druto/features/cart/repository/local/local_repository.dart';
 import 'package:druto/features/home/repository/home_repository.dart';
@@ -20,7 +21,7 @@ class SearchResultListView extends ConsumerWidget {
 
     final String query = ref.watch(searchQueryProvider);
 
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     List<Hub> isLocationWithinAnyHub(
         {required List<Hub> hubs, required LatLng location}) {
@@ -58,9 +59,9 @@ class SearchResultListView extends ConsumerWidget {
           Expanded(
               child: GridView.builder(
             itemCount: items.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisExtent: 238,
+              mainAxisExtent: context.height * 0.31,
             ),
             itemBuilder: (context, index) {
               final ProductLine productLine = items[index];

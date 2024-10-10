@@ -21,21 +21,7 @@ class AppStartupWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(aappstartupProvider).when(
           data: (data) {
-            return ref.watch(getPositionProvider).when(
-                  data: (data) {
-                    return onLoaded(context);
-                  },
-                  loading: () => const AppStartupLoadingWidget(
-                      loadingCause: "Getting Location"),
-                  error: (e, stk) {
-                    return AppStartupErrorWidget(
-                      message: stk.toString(),
-                      onRetry: () {
-                        ref.invalidate(aappstartupProvider);
-                      },
-                    );
-                  },
-                );
+            return onLoaded(context);
           },
           loading: () => const AppStartupLoadingWidget(
               loadingCause: "Getting data from server"),

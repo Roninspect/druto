@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,11 +26,18 @@ final getpositionNameProvider =
   return placemarks;
 });
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  bool gettingLocation = false;
+  @override
+  Widget build(BuildContext context) {
+    final position = ref.watch(isPositionNotifierProvider);
     List<Hub> isLocationWithinAnyHub(
         {required List<Hub> hubs, required LatLng location}) {
       List<Hub> matchingHubs = [];
@@ -47,81 +55,162 @@ class HomePage extends ConsumerWidget {
       return matchingHubs;
     }
 
-    final position = ref.watch(getPositionProvider).valueOrNull;
-    return AsyncValueWidget(
-      value: ref.watch(getHubsProvider),
-      data: (p0) {
-        final hub = isLocationWithinAnyHub(
-            hubs: p0, location: LatLng(position!.latitude, position.longitude));
-
-        return hub.isEmpty
-            ? const Center(
-                child: Text("Sorry , we're not available in your area!"))
-            : Scaffold(
-                appBar: AppBar(
-                  toolbarHeight: 90,
-                  centerTitle: false,
-                  title: const AddressBar(),
-                  actions: [
-                    InkWell(
-                      onTap: () => context.pushNamed(AppRoutes.search.name),
-                      child: const Icon(
-                        Ionicons.search,
-                        size: 27,
-                      ),
-                    ),
-                    SizedBox(width: context.wMdGap),
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(
-                        MaterialCommunityIcons.heart_outline,
-                        size: 26,
-                      ),
-                    ),
-                    SizedBox(width: context.wMdGap),
-                    InkWell(
-                      onTap: () {},
-                      child: const Badge(
-                        child: Icon(
-                          Ionicons.md_notifications_outline,
-                          size: 27,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: context.wMdGap),
-                  ],
-                ),
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return position == null
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    onPressed: () {},
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const OfferSlider(),
-                        SizedBox(height: context.height * 0.01),
-                        const Text(
-                          "Shop by category",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            "Manually Place Location",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        SizedBox(height: context.height * 0.01),
-                        const CategoryListView(),
-                        SizedBox(height: context.height * 0.02),
-                        const PopularPackageListview(),
-                        const PopularProductsListview(),
-                        const ListBanner(position: 1),
-                        const PopularProductsListview(),
-                        const PopularProductsListview(),
-                        const ListBanner(position: 2),
-                        const PopularProductsListview(),
-                        const PopularProductsListview(),
-                        const ListBanner(position: 3),
+                        Icon(
+                          Icons.location_pin,
+                          color: Colors.black,
+                        )
                       ],
-                    ),
-                  ),
-                ));
-      },
-    );
+                    )),
+              ),
+              Center(
+                child: ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    onPressed: () async {
+                      setState(() {
+                        gettingLocation = true;
+                      });
+                      final positions = await getPositions();
+
+                      ref
+                          .read(isPositionNotifierProvider.notifier)
+                          .setPosition(positions);
+                      setState(() {
+                        gettingLocation = false;
+                      });
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            gettingLocation
+                                ? "Getting Current Location..."
+                                : "Get Current Location",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        !gettingLocation
+                            ? const Icon(
+                                Icons.my_location_rounded,
+                                color: Colors.white,
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: SizedBox(
+                                  height: 10,
+                                  width: 10,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                      ],
+                    )),
+              ),
+            ],
+          )
+        : AsyncValueWidget(
+            value: ref.watch(getHubsProvider),
+            data: (p0) {
+              final hub = isLocationWithinAnyHub(
+                  hubs: p0,
+                  location: LatLng(position.latitude, position.longitude));
+
+              return hub.isEmpty
+                  ? const Center(
+                      child: Text("Sorry , we're not available in your area!"))
+                  : Scaffold(
+                      appBar: AppBar(
+                        toolbarHeight: 90,
+                        centerTitle: false,
+                        title: const AddressBar(),
+                        actions: [
+                          InkWell(
+                            onTap: () =>
+                                context.pushNamed(AppRoutes.search.name),
+                            child: const Icon(
+                              Ionicons.search,
+                              size: 27,
+                            ),
+                          ),
+                          SizedBox(width: context.wMdGap),
+                          InkWell(
+                            onTap: () {},
+                            child: const Icon(
+                              MaterialCommunityIcons.heart_outline,
+                              size: 26,
+                            ),
+                          ),
+                          SizedBox(width: context.wMdGap),
+                          InkWell(
+                            onTap: () {},
+                            child: const Badge(
+                              child: Icon(
+                                Ionicons.md_notifications_outline,
+                                size: 27,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: context.wMdGap),
+                        ],
+                      ),
+                      body: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const OfferSlider(),
+                              SizedBox(height: context.height * 0.01),
+                              const Text(
+                                "Shop by category",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: context.height * 0.01),
+                              const CategoryListView(),
+                              SizedBox(height: context.height * 0.02),
+                              const PopularPackageListview(),
+                              const PopularProductsListview(),
+                              const ListBanner(position: 1),
+                              const PopularProductsListview(),
+                              const PopularProductsListview(),
+                              const ListBanner(position: 2),
+                              const PopularProductsListview(),
+                              const PopularProductsListview(),
+                              const ListBanner(position: 3),
+                            ],
+                          ),
+                        ),
+                      ));
+            },
+          );
   }
 }
 

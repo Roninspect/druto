@@ -1,3 +1,4 @@
+import 'package:druto/features/address/pages/address_page.dart';
 import 'package:druto/features/checkout/pages/checkout_page.dart';
 import 'package:druto/features/offers/pages/offersPage.dart';
 import 'package:druto/features/orders/pages/guest_orders.list.dart';
@@ -23,6 +24,7 @@ enum AppRoutes {
   guestOrder,
   search,
   offers,
+  address,
 }
 
 @riverpod
@@ -86,6 +88,11 @@ GoRouter router(RouterRef ref) {
               path: state.pathParameters["path"]!,
             ),
           ),
+          GoRoute(
+            path: 'address',
+            name: AppRoutes.address.name,
+            builder: (context, state) => const AddressPage(),
+          )
         ],
       ),
     ],

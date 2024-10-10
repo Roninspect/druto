@@ -33,7 +33,7 @@ class CategoryListView extends ConsumerWidget {
       return matchingHubs;
     }
 
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     final hubs = ref.watch(getHubsProvider).valueOrNull;
 

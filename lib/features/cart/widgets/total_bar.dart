@@ -15,7 +15,7 @@ class TotalBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final position = ref.watch(getPositionProvider).valueOrNull;
+    final position = ref.watch(isPositionNotifierProvider);
 
     final hubs = ref.watch(getHubsProvider).value!;
 
